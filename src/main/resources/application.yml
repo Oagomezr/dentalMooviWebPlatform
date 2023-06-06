@@ -1,0 +1,25 @@
+server:
+    port: 8087
+
+spring:
+
+    jpa:
+        database: POSTGRESQL
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        show-sql: true
+        hibernate:
+            ddl-auto: create-drop
+
+    sql:
+        init:
+            platform: postgres
+
+    datasource:
+        url: jdbc:postgresql://localhost:5432/dentalmoovi
+        username: postgres
+        password: Growth31053017
+        driver-class-name: org.postgresql.Driver
+
+logging:
+    level:
+        '[org.hibernate.SQL]': DEBUG
