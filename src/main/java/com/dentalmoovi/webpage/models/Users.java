@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,12 +17,14 @@ import jakarta.persistence.JoinColumn;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @EqualsAndHashCode
 @Entity
 @Table
 @AllArgsConstructor
+@NoArgsConstructor
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,7 +55,7 @@ public class Users {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable( name = "users_roles",
                 joinColumns = { @JoinColumn(name = "id_user", referencedColumnName = "id_user") },
                 inverseJoinColumns = { @JoinColumn(name = "id_role", referencedColumnName = "id_role") })
