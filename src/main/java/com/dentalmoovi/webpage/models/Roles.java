@@ -1,6 +1,7 @@
 package com.dentalmoovi.webpage.models;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -13,11 +14,14 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 
 @Data
-@EqualsAndHashCode
+@Setter
+@Getter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,7 +36,20 @@ public class Roles {
     @Column(name = "name_role")
     private String nameRole;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private Set<Users> users = new HashSet<>();
     
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Roles roles = (Roles) o;
+        return Objects.equals(idRole, roles.idRole) &&
+                Objects.equals(nameRole, roles.nameRole);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idRole, nameRole);
+    }
 }

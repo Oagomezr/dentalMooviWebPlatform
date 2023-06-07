@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,7 @@ public class UserSer implements InterfaceUserSer{
                 String hashedPassword = new BCryptPasswordEncoder().encode(userDTO.getPassword()); //Encrypt the password
                 newUser.setPassword(hashedPassword); //set encrypt pssword
                 Users userCreated = usersRep.save(newUser); // add complete user to the database
+                usersRep.flush();
                 userDTO.setRoles(new HashSet<>());
                 userDTO.getRoles().add(new RoleDTO(defaultRole.getIdRole(), "USER", null)); //ADD default role
                 userDTO.setIdUser(userCreated.getIdUser()); // get id generated from database and store inside DTO
@@ -82,9 +84,9 @@ public class UserSer implements InterfaceUserSer{
     }
 
     @Override
-    public UserDTO updateUser(Long id, UserDTO userDTO) {
-        Users user = usersRep.findById(id).orElseThrow(() -> new DataNotFoundException(notFoundMessage));
-        userDTO.setIdUser(id);
+    public UserDTO updateUser(Long idUser, UserDTO userDTO) {
+        Users user = usersRep.findById(idUser).orElseThrow(() -> new DataNotFoundException(notFoundMessage));
+        userDTO.setIdUser(idUser);
         user.setUsername(userDTO.getUsername());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
@@ -119,6 +121,7 @@ public class UserSer implements InterfaceUserSer{
 
         Set<Roles> roles = user.getRoles();
         if(roles !=null && !roles.isEmpty()){
+            Hibernate.initialize(roles);
             userDTO.setRoles(getAllUserRolesFromDatabase(roles));
         }
 

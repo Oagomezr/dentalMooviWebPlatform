@@ -19,7 +19,7 @@ import com.dentalmoovi.webpage.repositories.IUsersRep;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-public class JpaRepositoryTest {
+class JpaRepositoryTest {
     
     @Autowired
     private IUsersRep usersRep;

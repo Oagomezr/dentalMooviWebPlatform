@@ -12,12 +12,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class DatabaseConnectionTest {
+class DatabaseConnectionTest {
     @Autowired
     private DataSource dataSource;
 
     @Test
-    public void testDatabaseConnection() throws Exception {
+    void testDatabaseConnection() throws Exception {
         try (Connection connection = dataSource.getConnection()) {
             assertNotNull(connection);
         }
