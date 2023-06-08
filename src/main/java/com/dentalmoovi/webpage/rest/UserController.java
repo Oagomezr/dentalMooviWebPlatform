@@ -23,20 +23,20 @@ import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
 import com.dentalmoovi.webpage.services.UserSer;
 
 @RestController
-@RequestMapping("/public")
+@RequestMapping
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
     
     @Autowired
     private UserSer userSer;
 
-    @GetMapping
+    @GetMapping("/admin")
     public ResponseEntity<List<UserDTO>> getAllUsers(){
         List <UserDTO> users = userSer.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
-    @PostMapping
+    @PostMapping("/public")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO){
         try {
             UserDTO userCreated = userSer.createUser(userDTO);
@@ -46,7 +46,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/admin/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable Long id){
         try {
             UserDTO userGetted = userSer.getUser(id);
@@ -57,7 +57,7 @@ public class UserController {
         
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/admin/{id}")
     public ResponseEntity<UserDTO> actualizarUsuario(@PathVariable("id") Long id, @RequestBody UserDTO usersDTO) {
         try {
             UserDTO userUpdated = userSer.updateUser(id, usersDTO);
@@ -68,7 +68,7 @@ public class UserController {
         
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id){
         try {
             userSer.deleteUser(id);
