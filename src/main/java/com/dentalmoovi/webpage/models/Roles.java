@@ -36,7 +36,7 @@ public class Roles {
     @Column(name = "name_role")
     private String nameRole;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     private Set<Users> users = new HashSet<>();
     
     @Override
@@ -52,4 +52,11 @@ public class Roles {
     public int hashCode() {
         return Objects.hash(idRole, nameRole);
     }
+
+    @Override
+    public String toString() {
+        return nameRole;
+    }
+    
+    
 }
