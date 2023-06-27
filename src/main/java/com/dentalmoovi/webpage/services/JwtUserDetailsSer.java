@@ -10,7 +10,7 @@ import com.dentalmoovi.webpage.models.Roles;
 import com.dentalmoovi.webpage.models.Users;
 import com.dentalmoovi.webpage.repositories.IUsersRep;
 
-public class UserDetailsCustom implements UserDetailsService{
+public class JwtUserDetailsSer implements UserDetailsService{
     @Autowired
     private IUsersRep usersRep;
 
