@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Service;
 
 import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
 import com.dentalmoovi.webpage.models.Roles;
 import com.dentalmoovi.webpage.models.Users;
 import com.dentalmoovi.webpage.repositories.IUsersRep;
 
+@Service
 public class JwtUserDetailsSer implements UserDetailsService{
     @Autowired
     private IUsersRep usersRep;

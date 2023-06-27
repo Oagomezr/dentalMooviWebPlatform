@@ -11,17 +11,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.dentalmoovi.webpage.services.JwtUserDetailsSer;
+/* import com.dentalmoovi.webpage.services.JwtUserDetailsSer; */
 
-import static org.springframework.security.config.Customizer.withDefaults;
+/* import static org.springframework.security.config.Customizer.withDefaults; */
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtRequestFilter jwtRequestFilter) throws Exception{
         http
             
             .authorizeHttpRequests(authorize -> authorize
@@ -33,18 +34,19 @@ public class SecurityConfig {
                 .authenticated());
 
         http.cors(Customizer.withDefaults())
-        .csrf(csrf -> csrf.disable());
+        .csrf(csrf -> csrf.disable())
+        .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
-        http.formLogin(withDefaults());
-        http.httpBasic(withDefaults());
+        /* http.formLogin(withDefaults());
+        http.httpBasic(withDefaults()); */
 
     return http.build();
     }
 
-    @Bean
+    /* @Bean
     JwtUserDetailsSer userDetailsService(){
         return new JwtUserDetailsSer();
-    }
+    } */
 
     @Bean
     PasswordEncoder passwordEncoder(){
