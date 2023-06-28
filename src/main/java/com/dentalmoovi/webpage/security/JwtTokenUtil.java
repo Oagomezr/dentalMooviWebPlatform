@@ -1,6 +1,5 @@
 package com.dentalmoovi.webpage.security;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +13,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
-public class JwtTokenUtil implements Serializable{
+public class JwtTokenUtil{
 
     private static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60; // 5 hours in seconds
 
