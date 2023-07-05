@@ -47,14 +47,23 @@ public class UserController {
     }
 
     @GetMapping("/admin/{id}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable Long id){
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id){
         try {
-            UserDTO userGetted = userSer.getUser(id);
+            UserDTO userGetted = userSer.getUserById(id);
             return ResponseEntity.ok(userGetted);
         } catch (DataNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
-        
+    }
+
+    @GetMapping("/user/{token}")
+    public ResponseEntity<UserDTO> getUserByToken(@PathVariable String token){
+        try {
+            UserDTO userGetted = userSer.getUserByJwt(token);
+            return ResponseEntity.ok(userGetted);
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/admin/{id}")

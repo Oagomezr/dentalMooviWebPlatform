@@ -35,7 +35,7 @@ public class JwtAuthenticationController {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         } catch (BadCredentialsException e) {
-            throw new Exception("Credenciales inválidas", e);
+            throw new Exception("Bad Credentials", e);
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());

@@ -18,6 +18,7 @@ import com.dentalmoovi.webpage.models.Roles;
 import com.dentalmoovi.webpage.models.Users;
 import com.dentalmoovi.webpage.repositories.IRolesRep;
 import com.dentalmoovi.webpage.repositories.IUsersRep;
+import com.dentalmoovi.webpage.security.JwtTokenUtil;
 
 @Service
 public class UserSer implements InterfaceUserSer{
@@ -26,6 +27,9 @@ public class UserSer implements InterfaceUserSer{
     private IUsersRep usersRep;
     @Autowired
     private IRolesRep rolesRep;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -78,8 +82,15 @@ public class UserSer implements InterfaceUserSer{
     }
 
     @Override
-    public UserDTO getUser(Long idUser) {
+    public UserDTO getUserById(Long idUser) {
         Users user = usersRep.findById(idUser).orElseThrow(() -> new DataNotFoundException(notFoundMessage));
+        return convertUserToDTO(user);
+    }
+
+    @Override
+    public UserDTO getUserByJwt(String token) {
+        String usernameToken = jwtTokenUtil.getUsernameFromToken(token);
+        Users user = usersRep.findByUsername(usernameToken).orElseThrow(() -> new DataNotFoundException(notFoundMessage));
         return convertUserToDTO(user);
     }
 
@@ -145,4 +156,5 @@ public class UserSer implements InterfaceUserSer{
     }
 
     private String notFoundMessage = "User not found";
+
 }

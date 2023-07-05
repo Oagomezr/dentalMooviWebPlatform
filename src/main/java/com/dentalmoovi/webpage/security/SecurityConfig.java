@@ -28,7 +28,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 
                 .requestMatchers("/public/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("USER")
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/user/**").hasRole("USER")
 
                 .anyRequest()
                 .authenticated());
@@ -46,17 +47,6 @@ public class SecurityConfig {
     /* @Bean
     JwtUserDetailsSer userDetailsService(){
         return new JwtUserDetailsSer();
-    } */
-
-    /* @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*");
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     } */
 
     @Bean

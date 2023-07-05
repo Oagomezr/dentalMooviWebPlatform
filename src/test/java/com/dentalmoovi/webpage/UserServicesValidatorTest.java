@@ -25,7 +25,7 @@ class UserServicesValidatorTest {
     @BeforeEach
     void init(){
         try {
-            userSer.getUser(1L);
+            userSer.getUserById(1L);
         } catch (Exception e) {
             UserDTO userSend = new UserDTO(null, "Oagomezr", "Oscar Alberto", "Gomez Rodriguez", "Oscar.gomez.ro17@gmail.com", "3202148944", null, "Masculino", "Growth31053017", null);
             userReceive = userSer.createUser(userSend);
@@ -40,7 +40,7 @@ class UserServicesValidatorTest {
 
     @Test
     void getUserAndUpdateValidator(){
-        UserDTO getUser = userSer.getUser(1L);
+        UserDTO getUser = userSer.getUserById(1L);
         assertNotNull(getUser);
         assertEquals(1, getUser.getRoles().size());
         UserDTO userSend2 = new UserDTO(null, "Aigomezr", "Angie Natalia", "Gomez Rodriguez", "Angie.natalia47@gmail.com", "3222148944", null, "Femenino", "PerrosEnCorto", null);
@@ -51,7 +51,7 @@ class UserServicesValidatorTest {
     @Test
     void deleteUserValidator(){
         assertDoesNotThrow(() -> userSer.deleteUser(1L));
-        assertThrows(DataNotFoundException.class, () -> userSer.getUser(1L));
+        assertThrows(DataNotFoundException.class, () -> userSer.getUserById(1L));
     }
 
 }
