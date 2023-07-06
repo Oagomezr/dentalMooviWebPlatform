@@ -87,7 +87,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/checkValueExists/{field}/{value}")
+    @GetMapping("/public/{field}/{value}")
     public boolean checkValueExists(@PathVariable String field, @PathVariable String value) {
         return userSer.checkValueExists(field, value);
     }

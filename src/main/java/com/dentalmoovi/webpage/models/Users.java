@@ -43,7 +43,7 @@ public class Users {
     @Column(nullable = false, unique = true, length = 60)
     private String email;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 12)
     private String celPhone;
 
     @Column(nullable = true)
