@@ -30,12 +30,12 @@ public class JwtTokenUtil{
 
     // Method to validate a JWT token
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUsernameFromToken(token);
+        final String username = getEmailFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    // Method to get the username from JWT token
-    public String getUsernameFromToken(String token) {
+    // Method to get the username or email from JWT token
+    public String getEmailFromToken(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
 

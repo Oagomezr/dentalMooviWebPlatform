@@ -44,8 +44,8 @@ class JpaRepositoryTest {
         normalRoles.add(defaultRole);
 
         //create 2 users to do test
-        Users user1 = new Users(null, "Usuario1", "uno", "usuario1", "usuario1@mail.com", "0123456789", null, "indefinido", "12345", null);
-        Users user2 = new Users(null, "Usuario2", "dos", "usuario2", "usuario2@mail.com", "0123456789", null, "indefinido", "12345", null);
+        Users user1 = new Users(null, "uno", "usuario1", "usuario1@mail.com", "0123456789", null, "indefinido", "12345", null);
+        Users user2 = new Users(null, "dos", "usuario2", "usuario2@mail.com", "0123456789", null, "indefinido", "12345", null);
         user1.setRoles(normalRoles);
         user2.setRoles(normalRoles);
 

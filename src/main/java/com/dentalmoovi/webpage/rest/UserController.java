@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.dentalmoovi.webpage.dtos.UserDTO;
-import com.dentalmoovi.webpage.exceptions.DataExistException;
 import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
 import com.dentalmoovi.webpage.services.UserSer;
 
@@ -41,7 +40,7 @@ public class UserController {
         try {
             UserDTO userCreated = userSer.createUser(userDTO);
             return ResponseEntity.created(URI.create("/users/"+userCreated.getIdUser())).body(userCreated);
-        } catch (DataExistException e) {
+        } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
@@ -88,7 +87,7 @@ public class UserController {
     }
 
     @GetMapping("/public/{field}/{value}")
-    public boolean checkValueExists(@PathVariable String field, @PathVariable String value) {
-        return userSer.checkValueExists(field, value);
+    public boolean checkEmailExists(@PathVariable String email) {
+        return userSer.checkEmailExists(email);
     }
 }

@@ -32,9 +32,6 @@ public class Users {
     private Long idUser;
 
     @Column(nullable = false, length = 25)
-    private String username;
-
-    @Column(nullable = false, length = 25)
     private String firstName;
 
     @Column(nullable = false, length = 25)

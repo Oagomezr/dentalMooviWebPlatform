@@ -27,7 +27,7 @@ class UserServicesValidatorTest {
         try {
             userSer.getUserById(1L);
         } catch (Exception e) {
-            UserDTO userSend = new UserDTO(null, "Oagomezr", "Oscar Alberto", "Gomez Rodriguez", "Oscar.gomez.ro17@gmail.com", "3202148944", null, "Masculino", "Growth31053017", null);
+            UserDTO userSend = new UserDTO(null, "Oscar Alberto", "Gomez Rodriguez", "Oscar.gomez.ro17@gmail.com", "3202148944", null, "Masculino", "Growth31053017", null);
             userReceive = userSer.createUser(userSend);
         }
     }
@@ -43,9 +43,9 @@ class UserServicesValidatorTest {
         UserDTO getUser = userSer.getUserById(1L);
         assertNotNull(getUser);
         assertEquals(1, getUser.getRoles().size());
-        UserDTO userSend2 = new UserDTO(null, "Aigomezr", "Angie Natalia", "Gomez Rodriguez", "Angie.natalia47@gmail.com", "3222148944", null, "Femenino", "PerrosEnCorto", null);
+        UserDTO userSend2 = new UserDTO(null, "Angie Natalia", "Gomez Rodriguez", "Angie.natalia47@gmail.com", "3222148944", null, "Femenino", "PerrosEnCorto", null);
         UserDTO userUpdate = userSer.updateUser(1L, userSend2);
-        assertEquals(userSend2.getUsername(), userUpdate.getUsername());
+        assertEquals(userSend2.getEmail(), userUpdate.getEmail());
     }
 
     @Test

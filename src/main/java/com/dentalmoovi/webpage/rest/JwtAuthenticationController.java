@@ -31,14 +31,16 @@ public class JwtAuthenticationController {
 
     @PostMapping("/public/authenticate")
     public ResponseEntity<JwtResponse> authenticate(@RequestBody JwtRequest request) throws Exception {
+
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+            
         } catch (BadCredentialsException e) {
             throw new Exception("Bad Credentials", e);
         }
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
 
         return ResponseEntity.ok(new JwtResponse(token));

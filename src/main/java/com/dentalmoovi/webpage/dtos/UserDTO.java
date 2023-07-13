@@ -13,7 +13,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserDTO {
     private Long idUser;
-    private String username;
     private String firstName;
     private String lastName;
     private String email;

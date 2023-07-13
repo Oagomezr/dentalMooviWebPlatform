@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.dentalmoovi.webpage.dtos.RoleDTO;
 import com.dentalmoovi.webpage.dtos.UserDTO;
-import com.dentalmoovi.webpage.exceptions.DataExistException;
 import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
 import com.dentalmoovi.webpage.models.Roles;
 import com.dentalmoovi.webpage.models.Users;
@@ -44,7 +43,7 @@ public class UserSer implements InterfaceUserSer{
 
             /* ¡¡PLEASE PAY CLOSE ATTENTION ONLY THIS "createUser()" METHOD TO UNDERSTAND THIS SERVICE!! */ 
             UserDTO createUser(){ 
-                checkIfUserExist(userDTO);
+                checkEmailExists(userDTO.getEmail());
                 Users newUser = insertUnrelatedData(userDTO); //add non foreign key data
                 Roles defaultRole = rolesRep.findByNameRole("USER").orElseThrow(() -> new DataNotFoundException(notFoundMessage));
                 newUser.getRoles().add(defaultRole); //add default role --> USER
@@ -57,22 +56,10 @@ public class UserSer implements InterfaceUserSer{
                 userDTO.setIdUser(userCreated.getIdUser()); // get id generated from database and store inside DTO
                 return userDTO;
             }
-
-            private void checkIfUserExist(UserDTO userDTO){
-                // Check if username already exist
-                if (usersRep.existsByUsername(userDTO.getUsername())) {
-                    throw new DataExistException("El nombre de usuario ya está registrado");
-                }
-        
-                // Check if email already exist
-                if (usersRep.existsByEmail(userDTO.getEmail())) {
-                    throw new DataExistException("El correo electrónico ya está registrado");
-                }
-            }
         
             private Users insertUnrelatedData(UserDTO userDTO){
                 return new Users(  
-                    null, userDTO.getUsername(), userDTO.getFirstName(), userDTO.getLastName(), 
+                    null, userDTO.getFirstName(), userDTO.getLastName(), 
                     userDTO.getEmail(), userDTO.getCelPhone(), userDTO.getBirthday(), userDTO.getGender(), null, new HashSet<>());
             }
         }
@@ -89,8 +76,11 @@ public class UserSer implements InterfaceUserSer{
 
     @Override
     public UserDTO getUserByJwt(String token) {
-        String usernameToken = jwtTokenUtil.getUsernameFromToken(token);
-        Users user = usersRep.findByUsername(usernameToken).orElseThrow(() -> new DataNotFoundException(notFoundMessage));
+        Users user;
+        String usernameToken = jwtTokenUtil.getEmailFromToken(token);
+
+        user = usersRep.findByEmail(usernameToken).orElseThrow(() -> new DataNotFoundException(notFoundMessage));
+        
         return convertUserToDTO(user);
     }
 
@@ -98,7 +88,6 @@ public class UserSer implements InterfaceUserSer{
     public UserDTO updateUser(Long idUser, UserDTO userDTO) {
         Users user = usersRep.findById(idUser).orElseThrow(() -> new DataNotFoundException(notFoundMessage));
         userDTO.setIdUser(idUser);
-        user.setUsername(userDTO.getUsername());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
@@ -116,15 +105,8 @@ public class UserSer implements InterfaceUserSer{
     }
 
     @Override
-    public boolean checkValueExists(String field, String value) {
-        switch (field) {
-            case "username":
-                return usersRep.existsByUsername(value);
-            case "email":
-                return usersRep.existsByEmail(value);
-            default:
-                throw new IllegalArgumentException("Invalid field: " + field);
-        }
+    public boolean checkEmailExists(String value) {
+        return usersRep.existsByEmail(value).orElseThrow(() -> new IllegalArgumentException("Email no exists"));
     }
 
     private UserDTO convertUserToDTO(Users user){
@@ -140,7 +122,7 @@ public class UserSer implements InterfaceUserSer{
     }
 
     private UserDTO getUserFromDatabase(Users user){
-        return new UserDTO(user.getIdUser(), user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getCelPhone(), user.getBirthday(), user.getGender(), null, null);
+        return new UserDTO(user.getIdUser(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getCelPhone(), user.getBirthday(), user.getGender(), null, null);
     }
 
     private Set<RoleDTO> getAllUserRolesFromDatabase(Set<Roles> roles){

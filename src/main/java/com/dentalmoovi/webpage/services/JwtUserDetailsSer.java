@@ -17,12 +17,12 @@ public class JwtUserDetailsSer implements UserDetailsService{
     private IUsersRep usersRep;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws DataNotFoundException {
-        
-        Users user = usersRep.findByUsername(username).orElseThrow(() -> new DataNotFoundException("User Not Found"));
+    public UserDetails loadUserByUsername(String email) throws DataNotFoundException {
+
+        Users user = usersRep.findByEmail(email).orElseThrow(() -> new DataNotFoundException("User Not Found"));
         
         return User
-                .withUsername(username)
+                .withUsername(email)
                 .password(user.getPassword())
                 .roles(user.getRoles().stream().map(Roles::getNameRole).toArray(String[]::new))
                 .build();
