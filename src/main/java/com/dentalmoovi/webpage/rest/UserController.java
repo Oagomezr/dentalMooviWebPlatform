@@ -86,7 +86,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/public/{field}/{value}")
+    @GetMapping("/public/{email}")
     public boolean checkEmailExists(@PathVariable String email) {
         return userSer.checkEmailExists(email);
     }
