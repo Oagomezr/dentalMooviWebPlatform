@@ -8,7 +8,7 @@ public interface InterfaceUserSer {
     public List<UserDTO> getAllUsers();
     public UserDTO createUser(UserDTO userDTO);
     public UserDTO getUserById(Long idUser);
-    public UserDTO getUserByJwt(String token);
+    public UserDTO getUserByEmail(String token);
     public boolean checkEmailExists(String email);
     public UserDTO updateUser(Long id, UserDTO userDTO);
     public void deleteUser(Long id);

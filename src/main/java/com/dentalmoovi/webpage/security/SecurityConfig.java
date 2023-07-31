@@ -38,16 +38,8 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
         .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
-        /* http.formLogin(withDefaults());
-        http.httpBasic(withDefaults()); */
-
     return http.build();
     }
-
-    /* @Bean
-    JwtUserDetailsSer userDetailsService(){
-        return new JwtUserDetailsSer();
-    } */
 
     @Bean
     PasswordEncoder passwordEncoder(){

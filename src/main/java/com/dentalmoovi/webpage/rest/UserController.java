@@ -55,10 +55,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user/{token}")
-    public ResponseEntity<UserDTO> getUserByToken(@PathVariable String token){
+    @GetMapping("/user/{email}/info")
+    public ResponseEntity<UserDTO> getUserByToken(@PathVariable String email){
         try {
-            UserDTO userGetted = userSer.getUserByJwt(token);
+            UserDTO userGetted = userSer.getUserByEmail(email);
             return ResponseEntity.ok(userGetted);
         } catch (DataNotFoundException e) {
             return ResponseEntity.notFound().build();

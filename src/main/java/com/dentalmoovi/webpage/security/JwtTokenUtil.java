@@ -6,14 +6,21 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.annotation.Resource;
 
 @Component
 public class JwtTokenUtil{
+
+    @Resource
+    private CacheManager cacheManager;
 
     private static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60; // 5 hours in seconds
 
@@ -29,9 +36,16 @@ public class JwtTokenUtil{
     }
 
     // Method to validate a JWT token
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public boolean validateToken(String token, UserDetails userDetails) {
         final String username = getEmailFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+
+        if ( username.equals(userDetails.getUsername()) && Boolean.FALSE.equals(isTokenExpired(token))) {
+            return true; // Token valid and not expired
+        }
+
+        // Token not valid or it has been expired, so clear the context
+        SecurityContextHolder.clearContext();
+        return false; // Token not valid or it has been expired
     }
 
     // Method to get the username or email from JWT token
@@ -41,6 +55,13 @@ public class JwtTokenUtil{
 
     // Method to verify if JWT token has expired
     private Boolean isTokenExpired(String token) {
+        Cache blackList = cacheManager.getCache("blackList");
+
+        if (blackList != null) {
+            String cachedToken = blackList.get("token", String.class);
+            return token.equals(cachedToken); // Retorna true si el token está en la caché
+        }
+
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
@@ -62,6 +83,18 @@ public class JwtTokenUtil{
                 .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
+    }
+
+    // Method to expire a JWT token
+    public void expireToken(String token) {
+
+        //Caffeine<Object, Object> blackListConfig = blackListConfig();
+        Cache blackList = cacheManager.getCache("blackList");
+
+        if(blackList != null){
+            blackList.put("token", token);
+        }
+        
     }
 
 }

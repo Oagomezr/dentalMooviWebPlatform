@@ -33,14 +33,14 @@ public class JwtRequestFilter extends OncePerRequestFilter{
         
         final String requestTokenHeader = request.getHeader("Authorization");
 
-        String username = null;
+        String emailJwt = null;
         String jwtToken = null;
 
         // JWT Token is in the form of a "Bearer token". Remove Bearer word and get only the Token
         if(requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")){
             jwtToken = requestTokenHeader.substring(7);
             try {
-				username = jwtTokenUtil.getEmailFromToken(jwtToken);
+				emailJwt = jwtTokenUtil.getEmailFromToken(jwtToken);
 			} catch (IllegalArgumentException e) {
 				System.out.println("Cannot get JWT Token");
 			} catch (ExpiredJwtException e) {
@@ -52,9 +52,10 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 		}
 
         // Once we get the token, we proceed to validate it
-		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+		if (emailJwt != null && SecurityContextHolder.getContext().getAuthentication() == null &&
+			isUserHasAccess(request,emailJwt) ) {
 
-			UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
+			UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(emailJwt);
 
 			// if token is valid configure Spring Security to manually set authentication
 			if (Boolean.TRUE.equals(jwtTokenUtil.validateToken(jwtToken, userDetails))) {
@@ -70,5 +71,15 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 		}
 		filterChain.doFilter(request, response);
     }
+
+	private boolean isUserHasAccess(HttpServletRequest request, String emailJwt){
+		String[] urlSegments = request.getRequestURI().split("/");
+		if("user".equals(urlSegments[1])){
+			return urlSegments[2].equals(emailJwt);
+		}else if("admin".equals(urlSegments[1])){
+			return true;
+		}
+		return false;
+	}
     
 }
