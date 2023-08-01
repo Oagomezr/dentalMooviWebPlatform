@@ -33,10 +33,10 @@ public class Categories {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "parent_category_id")
+    @JoinColumn(name = "parent_category")
     private Categories parentCategory;
 
-    @OneToMany(mappedBy = "categories")
+    @OneToMany(mappedBy = "categories", targetEntity = Products.class)
     private Set<Products> products;
 
     @Override
