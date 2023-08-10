@@ -44,11 +44,9 @@ public class UserSer implements InterfaceUserSer{
                 newUser.getRoles().add(defaultRole); //add default role --> USER
                 String hashedPassword = new BCryptPasswordEncoder().encode(userDTO.getPassword()); //Encrypt the password
                 newUser.setPassword(hashedPassword); //set encrypt pssword
-                Users userCreated = usersRep.save(newUser); // add complete user to the database
+                usersRep.save(newUser); // add complete user to the database
                 usersRep.flush();
-                userDTO.setRoles(new HashSet<>());
-                userDTO.getRoles().add(new RoleDTO(defaultRole.getIdRole(), "USER", null)); //ADD default role
-                userDTO.setIdUser(userCreated.getIdUser()); // get id generated from database and store inside DTO
+                userDTO.setPassword(hashedPassword);
                 return userDTO;
             }
         
@@ -125,7 +123,7 @@ public class UserSer implements InterfaceUserSer{
         return rolesDTO;
     }
     private RoleDTO getRoleFromDatabase(Roles role){
-        return new RoleDTO(role.getIdRole(), role.getNameRole(), null);
+        return new RoleDTO(role.getIdRole(), role.getNameRole());
     }
 
     private String notFoundMessage = "User not found";
