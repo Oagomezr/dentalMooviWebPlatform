@@ -1,4 +1,4 @@
-package com.dentalmoovi.webpage.cache;
+package com.dentalmoovi.webpage.utils;
 
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
