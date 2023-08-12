@@ -35,48 +35,55 @@ public class StartupInitializer {
         Set<Categories> categoriesSet = new HashSet<>();
 
         // Parent categories
-        Categories desechables = new Categories(null, "Desechables", null, null);
-        Categories cuidadoDental = new Categories(null, "Higiene oral", null, null);
-        Categories instrumentacionDental = new Categories(null, "Instrumentación dental", null, null);
-        Categories ortodoncia = new Categories(null, "Ortodoncia", null, null);
-        Categories ortopedia = new Categories(null, "Ortopedia", null, null);
-        Categories rehabilitacionOral = new Categories(null, "Rehabilitación Oral", null, null);
+        Categories desechables = new Categories(null, "DESECHABLES", null, null);
+        Categories cuidadoDental = new Categories(null, "HIGIENE ORAL", null, null);
+        Categories instrumentacionDental = new Categories(null, "INSTRUMENTACIÓN DENTAL", null, null);
+        Categories ortodoncia = new Categories(null, "ORTODONCIA", null, null);
+        Categories ortopedia = new Categories(null, "ORTOPEDIA", null, null);
+        Categories rehabilitacionOral = new Categories(null, "REHABILITACIÓN ORAL", null, null);
         categoriesSet.addAll(List.of(desechables, cuidadoDental, instrumentacionDental, ortodoncia, ortopedia, rehabilitacionOral));
+
+        //Especial Sub-categories
+        Categories brakets = new Categories(null, "BRACKETS", ortodoncia, null);
 
         // Sub-categories
         // Dental instrumentation sub-categories
-        categoriesSet.add( new Categories(null, "Forceps", instrumentacionDental, null) );
-        categoriesSet.add( new Categories(null, "Hoja de bisturí", null, null) );
-        categoriesSet.add( new Categories(null, "Jeringas",  instrumentacionDental, null) );
-        categoriesSet.add( new Categories(null, "Mangos para bisturí",  instrumentacionDental, null) );
-        categoriesSet.add( new Categories(null, "Pinzas",  instrumentacionDental, null) );
-        categoriesSet.add( new Categories(null, "Porta agujas", instrumentacionDental, null) );
-        categoriesSet.add( new Categories(null, "Tijeras", instrumentacionDental, null) );
+        categoriesSet.add(new Categories(null, "HOJA DE BISTURÍ", instrumentacionDental, null));
+        categoriesSet.add(new Categories(null, "JERINGAS",  instrumentacionDental, null));
+        categoriesSet.add(new Categories(null, "MANGOS PARA BISTURÍ",  instrumentacionDental, null));
+        categoriesSet.add(new Categories(null, "PINZAS",  instrumentacionDental, null));
+        categoriesSet.add(new Categories(null, "PORTA AGUJAS", instrumentacionDental, null));
+        categoriesSet.add(new Categories(null, "TIJERAS", instrumentacionDental, null));
 
         // Orthodontics sub-categories
-        categoriesSet.add( new Categories(null, "Alambres", ortodoncia, null) );
-        categoriesSet.add( new Categories(null, "Arcos", ortodoncia, null) );
-        categoriesSet.add( new Categories(null, "Auxiliares", ortodoncia, null) );
-        categoriesSet.add( new Categories(null, "Brackets", ortodoncia, null) );
-        categoriesSet.add( new Categories(null, "Distalizador", ortodoncia, null) );
-        categoriesSet.add( new Categories(null, "Elastomeros", ortodoncia, null) );
-        categoriesSet.add( new Categories(null, "Instrumentos ortodonticos", ortodoncia, null) );
-        categoriesSet.add( new Categories(null, "Microimplantes", ortodoncia, null) );
-        categoriesSet.add( new Categories(null, "Pinzas", ortodoncia, null) );
-        categoriesSet.add( new Categories(null, "Tubos", ortodoncia, null) );
+        categoriesSet.add(new Categories(null, "ALAMBRES", ortodoncia, null));
+        categoriesSet.add(new Categories(null, "ARCOS", ortodoncia, null));
+        categoriesSet.add(new Categories(null, "AUXILIARES", ortodoncia, null));
+        categoriesSet.add(brakets);
+        categoriesSet.add(new Categories(null, "DISTALIZADOR", ortodoncia, null));
+        categoriesSet.add(new Categories(null, "ELASTOMEROS", ortodoncia, null));
+        categoriesSet.add(new Categories(null, "INSTRUMENTOS ORTODONTICOS", ortodoncia, null));
+        categoriesSet.add(new Categories(null, "MICROIMPLANTES", ortodoncia, null));
+        categoriesSet.add(new Categories(null, "PINZAS", ortodoncia, null));
+        categoriesSet.add(new Categories(null, "TUBOS", ortodoncia, null));
+
+        // Brakets sub-categories
+        categoriesSet.add(new Categories(null, "CARRIERE", brakets, null));
+        categoriesSet.add(new Categories(null, "DELTA FORCE", brakets, null));
+        categoriesSet.add(new Categories(null, "ESTANDAR", brakets, null));
+        categoriesSet.add(new Categories(null, "MBT", brakets, null));
+        categoriesSet.add(new Categories(null, "ROTH", brakets, null));
 
         // Oral rehabilitation sub-categories
-        categoriesSet.add( new Categories(null, "Adhesivos", rehabilitacionOral, null) );
-        categoriesSet.add( new Categories(null, "Bisacrylicos", rehabilitacionOral, null) );
-        categoriesSet.add( new Categories(null, "Cemento", rehabilitacionOral, null) );
-        categoriesSet.add( new Categories(null, "Compomeros", rehabilitacionOral, null) );
-        categoriesSet.add( new Categories(null, "Postes", rehabilitacionOral, null) );
-        categoriesSet.add( new Categories(null, "Provicionales", rehabilitacionOral, null) );
-        categoriesSet.add( new Categories(null, "Rebases", rehabilitacionOral, null) );
-        categoriesSet.add( new Categories(null, "Reconstructor", rehabilitacionOral, null) );
-        categoriesSet.add( new Categories(null, "Resinas", rehabilitacionOral, null) );
-
-        //categoriesSet.add( new Categories(null, null, rehabilitacionOral, null) );
+        categoriesSet.add(new Categories(null, "ADHESIVOS", rehabilitacionOral, null));
+        categoriesSet.add(new Categories(null, "BISACRÍLICOS", rehabilitacionOral, null));
+        categoriesSet.add(new Categories(null, "CEMENTO", rehabilitacionOral, null));
+        categoriesSet.add(new Categories(null, "COMPOMEROS", rehabilitacionOral, null));
+        categoriesSet.add(new Categories(null, "POSTES", rehabilitacionOral, null));
+        categoriesSet.add(new Categories(null, "PROVICIONALES", rehabilitacionOral, null));
+        categoriesSet.add(new Categories(null, "REBASES", rehabilitacionOral, null));
+        categoriesSet.add(new Categories(null, "RECONSTRUCTOR", rehabilitacionOral, null));
+        categoriesSet.add(new Categories(null, "RESINAS", rehabilitacionOral, null));
 
         categoriesRep.saveAll(categoriesSet);
     }
