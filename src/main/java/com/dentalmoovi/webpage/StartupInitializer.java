@@ -168,7 +168,7 @@ public class StartupInitializer {
         productsRep.saveAll(products);
 
         Set<Images> images = new HashSet<>();
-        Images adhesivo1Image = new Images(null, "adhesivo1Image", "jpg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\adhesivo1.jpg"), null);
+        Images adhesivo1Image = new Images(null, "adhesivo1Image", "jpg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\adhesivo1.jpg"), adhesivo1);
 
         images.addAll(List.of(adhesivo1Image));
 

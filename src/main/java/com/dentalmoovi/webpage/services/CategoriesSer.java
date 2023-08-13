@@ -25,7 +25,7 @@ public class CategoriesSer {
         List<Categories> parentCategories = categoriesRep.findByParentCategoryIsNull();
         Set<CategoriesDTO> parentCategoriesDTO = new HashSet<>();
         for (Categories parentCategory : parentCategories) {
-            CategoriesDTO parentCategoryDTO = new CategoriesDTO(parentCategory.getName(), 0, getSubCategories(parentCategory, 1));
+            CategoriesDTO parentCategoryDTO = new CategoriesDTO(parentCategory.getIdCategory() ,parentCategory.getName(), 0, getSubCategories(parentCategory, 1));
             parentCategoriesDTO.add(parentCategoryDTO);
         }
         return parentCategoriesDTO;
@@ -39,7 +39,7 @@ public class CategoriesSer {
             return childrenDTO;
         }else{
             for (Categories child : children) {
-                CategoriesDTO childDTO = new CategoriesDTO(child.getName(), readjust, getSubCategories(child, lvl+1));
+                CategoriesDTO childDTO = new CategoriesDTO(child.getIdCategory() ,child.getName(), readjust, getSubCategories(child, lvl+1));
                 childrenDTO.add(childDTO);
             }
             return childrenDTO;

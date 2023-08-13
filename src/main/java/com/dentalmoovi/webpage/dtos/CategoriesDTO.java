@@ -11,6 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CategoriesDTO {
 
+    private Long idCategory;
     private String name;
     private int levelCategory;
     private Set<CategoriesDTO> childrenCategories;
