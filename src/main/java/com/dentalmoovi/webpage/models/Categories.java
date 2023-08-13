@@ -36,7 +36,7 @@ public class Categories {
     @JoinColumn(name = "parent_category")
     private Categories parentCategory;
 
-    @OneToMany(mappedBy = "categories", targetEntity = Products.class)
+    @OneToMany(mappedBy = "category", targetEntity = Products.class)
     private Set<Products> products;
 
     @Override
