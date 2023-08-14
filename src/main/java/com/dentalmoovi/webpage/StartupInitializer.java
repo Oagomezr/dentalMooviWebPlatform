@@ -101,8 +101,8 @@ public class StartupInitializer {
 
         Set<Products> products = new HashSet<>();
 
-        Products adhesivo1 = new Products(null, "Adhesivo1", 10000, "description adhesivo1", 4, rehabilitacionOral, null);
-        Products adhesivo2 = new Products(null, "Adhesivo2", 12000, "description adhesivo2", 4, rehabilitacionOral, null);
+        Products adhesivo1 = new Products(null, "Adhesivo1", 10000, "description adhesivo1", 4, adhesivos, null);
+        Products adhesivo2 = new Products(null, "Adhesivo2", 12000, "description adhesivo2", 4, adhesivos, null);
         Products alambre1 = new Products(null, "Alambre1", 10000, "description alambre1", 4, ortodoncia, null);
         Products alambre2 = new Products(null, "Alambre2", 12000, "description alambre2", 4, ortodoncia, null);
         Products arco1 = new Products(null, "Arco1", 10000, "description arco1", 4, ortodoncia, null);
