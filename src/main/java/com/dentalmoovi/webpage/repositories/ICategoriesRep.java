@@ -17,5 +17,9 @@ public interface ICategoriesRep extends JpaRepository<Categories, Long>{
     @Query("SELECT MAX(e.id) FROM Categories e")
     long findMaxId();
 
-    long count();
+    @Query("SELECT SUM(e.numberUpdates) FROM Categories e")
+    long countUpdates();
+
+    @Query("SELECT c.checkProduct FROM Categories c WHERE c.id = ?1")
+    String findCheckProductosById(Long id);
 }

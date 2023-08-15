@@ -18,7 +18,7 @@ public class CategoriesSer {
     private ICategoriesRep categoriesRep;
 
     public String checkUpdate(){
-        return String.valueOf(categoriesRep.findMaxId() + categoriesRep.count());
+        return String.valueOf(categoriesRep.findMaxId() + categoriesRep.countUpdates());
     }
 
     public Set<CategoriesDTO> getAllCategories() {

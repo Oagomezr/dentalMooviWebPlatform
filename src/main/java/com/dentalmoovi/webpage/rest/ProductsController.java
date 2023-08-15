@@ -22,6 +22,16 @@ public class ProductsController {
     @Autowired
     private ProductsSer productsSer;
 
+    /* @GetMapping("/public/products/{id}")
+    public ResponseEntity<Set<ProductsDTO>> getProduct(@PathVariable Long id){
+        try {
+            Set<ProductsDTO> products = productsSer.getProductsByCategory(id);
+            return ResponseEntity.ok(products);
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    } */
+
     @GetMapping("/public/products/{id}")
     public ResponseEntity<Set<ProductsDTO>> getProduct(@PathVariable Long id){
         try {
@@ -30,5 +40,10 @@ public class ProductsController {
         } catch (DataNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/public/products/checkupdate/{id}")
+    public ResponseEntity<String> checkUpdateProductsByCategory(@PathVariable Long id){
+        return ResponseEntity.ok(productsSer.checkUpdateByCategory(id));
     }
 }

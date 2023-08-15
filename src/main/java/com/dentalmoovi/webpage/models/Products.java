@@ -42,6 +42,9 @@ public class Products {
     @Column(nullable = false, length = 50)
     private int stock;
 
+    @Column(length = 50)
+    private int numberUpdates;
+
     @ManyToOne
     @JoinColumn(name = "id_category")
     @JsonIgnore

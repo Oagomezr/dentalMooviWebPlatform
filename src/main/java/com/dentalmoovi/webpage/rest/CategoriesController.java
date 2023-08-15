@@ -21,7 +21,7 @@ public class CategoriesController {
     private CategoriesSer categoriesSer;
 
     @GetMapping("/public/categories/checkupdate")
-    public ResponseEntity<String> getMaxId() {
+    public ResponseEntity<String> checkUpdateCategories() {
         return ResponseEntity.ok(categoriesSer.checkUpdate());
     }
 

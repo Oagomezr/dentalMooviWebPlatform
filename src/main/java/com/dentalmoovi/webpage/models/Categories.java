@@ -32,6 +32,12 @@ public class Categories {
     @Column(nullable = false, length = 70)
     private String name;
 
+    @Column(length = 70)
+    private String checkProduct;
+
+    @Column(length = 50)
+    private int numberUpdates;
+
     @ManyToOne
     @JoinColumn(name = "parent_category")
     private Categories parentCategory;
