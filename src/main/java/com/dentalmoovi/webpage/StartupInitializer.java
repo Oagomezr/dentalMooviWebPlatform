@@ -7,10 +7,10 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.dentalmoovi.webpage.models.Categories;
-import com.dentalmoovi.webpage.models.Images;
-import com.dentalmoovi.webpage.models.Products;
-import com.dentalmoovi.webpage.models.Roles;
+import com.dentalmoovi.webpage.models.entities.Categories;
+import com.dentalmoovi.webpage.models.entities.Images;
+import com.dentalmoovi.webpage.models.entities.Products;
+import com.dentalmoovi.webpage.models.entities.Roles;
 import com.dentalmoovi.webpage.repositories.ICategoriesRep;
 import com.dentalmoovi.webpage.repositories.IImagesRep;
 import com.dentalmoovi.webpage.repositories.IProductsRep;
@@ -71,10 +71,10 @@ public class StartupInitializer {
                 // Brakets sub-categories
                 Categories carriere = new Categories(null, "CARRIERE", null, 1, brakets, null);
                 Categories deltaForce = new Categories(null, "DELTA FORCE", null, 1, brakets, null);
-                Categories estandar = new Categories(null, "ESTANDAR", null, 1, brakets, null);
+                //Categories estandar = new Categories(null, "ESTANDAR", null, 1, brakets, null);
                 Categories mbt = new Categories(null, "MBT", null, 1, brakets, null);
                 Categories roth = new Categories(null, "ROTH", null, 1, brakets, null);
-                categoriesSet.addAll(List.of(carriere, deltaForce, estandar, mbt, roth));
+                categoriesSet.addAll(List.of(carriere, deltaForce, /* estandar, */ mbt, roth));
             Categories distalizador = new Categories(null, "DISTALIZADOR", null, 1, ortodoncia, null);
             Categories elastomeros = new Categories(null, "ELASTOMEROS", null, 1, ortodoncia, null);
             Categories instrumentosOrtodonticos = new Categories(null, "INSTRUMENTOS ORTODONTICOS", null, 1, ortodoncia, null);
@@ -132,8 +132,8 @@ public class StartupInitializer {
         Products jeringa2 = new Products(null, "jeringa2", 12000, "description jeringa2", 4, 1, jeringas, null);
         Products mango1 = new Products(null, "mango1", 12000, "description mango1", 4, 1, mangoBisturi, null);
         Products mango2 = new Products(null, "mango2", 12000, "description mango2", 4, 1, mangoBisturi, null);
-        Products mBTBraket1 = new Products(null, "mBTBraket1", 12000, "description mBTBraket1", 4, 1, brakets, null);
-        Products mBTBraket2 = new Products(null, "mBTBraket2", 12000, "description mBTBraket2", 4, 1, brakets, null);
+        Products mBTBraket1 = new Products(null, "mBTBraket1", 12000, "description mBTBraket1", 4, 1, mbt, null);
+        Products mBTBraket2 = new Products(null, "mBTBraket2", 12000, "description mBTBraket2", 4, 1, mbt, null);
         Products ortopedia1 = new Products(null, "ortopedia1", 12000, "description ortopedia1", 4, 1, ortopedia, null);
         Products ortopedia2 = new Products(null, "ortopedia2", 12000, "description ortopedia2", 4, 1, ortopedia, null);
         Products pinzaDental1 = new Products(null, "pinzaDental1", 12000, "description pinzaDental1", 4, 1, pinzasDental, null);
@@ -143,17 +143,17 @@ public class StartupInitializer {
         Products portaAguja1 = new Products(null, "portaAguja1", 12000, "description portaAguja1", 4, 1, portaAgujas, null);
         Products portaAguja2 = new Products(null, "portaAguja2", 12000, "description portaAguja2", 4, 1, portaAgujas, null);
         Products protectorCepillo = new Products(null, "protectorCepillo", 12000, "description protectorCepillo", 4, 1, cuidadoDental, null);
-        Products provicionales1 = new Products(null, "provicionales1", 12000, "description provicionales1", 4, 1, provisionales, null);
-        Products provicionales2 = new Products(null, "provicionales2", 12000, "description provicionales2", 4, 1, provisionales, null);
+        Products provisional1 = new Products(null, "provicionales1", 12000, "description provicionales1", 4, 1, provisionales, null);
+        Products provisional2 = new Products(null, "provicionales2", 12000, "description provicionales2", 4, 1, provisionales, null);
         Products rebase1 = new Products(null, "rebase1", 12000, "description rebase1", 4, 1, rebases, null);
         Products rebase2 = new Products(null, "rebase2", 12000, "description rebase2", 4, 1, rebases, null);
         Products reconstructor1 = new Products(null, "reconstructor1", 12000, "description reconstructor1", 4, 1, reconstructor, null);
         Products reconstructor2 = new Products(null, "reconstructor2", 12000, "description reconstructor2", 4, 1, reconstructor, null);
         Products resina1 = new Products(null, "resina1", 12000, "description resina1", 4, 1, resinas, null);
         Products resina2 = new Products(null, "resina2", 12000, "description resina2", 4, 1, resinas, null);
-        Products rothBraket1 = new Products(null, "rothBraket1", 12000, "description rothBraket1", 4, 1, brakets, null);
-        Products rothBraket2 = new Products(null, "rothBraket2", 12000, "description rothBraket2", 4, 1, brakets, null);
-        Products tapabocas1 = new Products(null, "tapabocas1", 12000, "description tapabocas1", 4, 1, desechables, null);
+        Products rothBraket1 = new Products(null, "rothBraket1", 12000, "description rothBraket1", 4, 1, roth, null);
+        Products rothBraket2 = new Products(null, "rothBraket2", 12000, "description rothBraket2", 4, 1, roth, null);
+        Products tapaBocas1 = new Products(null, "tapabocas1", 12000, "description tapabocas1", 4, 1, desechables, null);
         Products tigera1 = new Products(null, "tigera1", 12000, "description tigera1", 4, 1, tijeras, null);
         Products tubo1 = new Products(null, "tubo1", 12000, "description tubo1", 4, 1, tubos, null);
         Products tubo2 = new Products(null, "tubo2", 12000, "description tubo2", 4, 1, tubos, null);
@@ -163,14 +163,66 @@ public class StartupInitializer {
                                 guantesLatex, guantesLatex, hojaBisturi1, hojaBisturi2, instrumentoOrtodoncia1, instrumentoOrtodoncia2,
                                 jeringa1, jeringa2, mango1, mango2, mBTBraket1, mBTBraket2, ortopedia1, ortopedia2, pinzaDental1,
                                 pinzaDental2, pinzaOrtodoncia1, pinzaOrtodoncia2,portaAguja1, portaAguja2, protectorCepillo,
-                                provicionales1, provicionales2, rebase1, rebase2, reconstructor1, reconstructor2,
-                                resina1, resina2, rothBraket1, rothBraket2, tapabocas1, tigera1, tubo1, tubo2));
+                                provisional1, provisional2, rebase1, rebase2, reconstructor1, reconstructor2,
+                                resina1, resina2, rothBraket1, rothBraket2, tapaBocas1, tigera1, tubo1, tubo2));
         productsRep.saveAll(products);
 
         Set<Images> images = new HashSet<>();
-        Images adhesivo1Image = new Images(null, "adhesivo1Image", "jpg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\adhesivo1.jpg"), adhesivo1);
-
-        images.addAll(List.of(adhesivo1Image));
+        images.add( new Images(null, "adhesivo1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\adhesivo1.jpg"), adhesivo1));
+        images.add( new Images(null, "adhesivo2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\adhesivo2.jpg"), adhesivo2));
+        images.add( new Images(null, "alambre1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\alambre1.jpeg"), alambre1));
+        images.add( new Images(null, "alambre2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\alambre2.jpg"), alambre2));
+        images.add( new Images(null, "arco1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\arco1.jpg"), arco1));
+        images.add( new Images(null, "arco2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\arco2.jpg"), arco2));
+        images.add( new Images(null, "auxiliar1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\auxiliar1.jpg"), auxiliar1));
+        images.add( new Images(null, "auxiliar2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\auxiliar2.jpg"), auxiliar2));
+        images.add( new Images(null, "bisacrilico1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\bisacrilico1.jpg"), bisacrilico1));
+        images.add( new Images(null, "bisacrilico2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\bisacrilico2.jpg"), bisacrilico2));
+        images.add( new Images(null, "carrierBraket1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\carrierBraket1.jpg"), carrierBraket1));
+        images.add( new Images(null, "cemento1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\cemento1.jpg"), cemento1));
+        images.add( new Images(null, "cepilloOralImage", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\CEPILLO-ORAL.jpg"), cepilloOral));
+        images.add( new Images(null, "compomero1Image", "png", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\compomero1.png"), compomero1));
+        images.add( new Images(null, "adhesivo1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\adhesivo1.jpg"), adhesivo1));
+        images.add( new Images(null, "deltaForceBraket1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\dentalForceBraket1.jpg"), deltaForceBraket1));
+        images.add( new Images(null, "distalizador1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\distalizador1.jpg"), distalizador1));
+        images.add( new Images(null, "distalizador2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\distalizador2.jpg"), distalizador2));
+        images.add( new Images(null, "elastomeros1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\elastomero1.jpg"), elastomeros1));
+        images.add( new Images(null, "elastomeros2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\elastomero2.jpg"), elastomeros2));
+        images.add( new Images(null, "estandarBraket1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\estandarBraket1.jpg"), estandarBraket1));
+        images.add( new Images(null, "estandarBraket2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\estandarBraket2.jpg"), estandarBraket2));
+        images.add( new Images(null, "guantesLatexImage", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\Guantes-latex.jpg"), guantesLatex));
+        images.add( new Images(null, "hojaBisturi1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\hojaBisturi1.jpg"), hojaBisturi1));
+        images.add( new Images(null, "hojaBisturi2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\hojaBisturi2.jpg"), hojaBisturi2));
+        images.add( new Images(null, "instrumentoOrtodoncia1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\instrumentoOrtodoncia1.jpg"), instrumentoOrtodoncia1));
+        images.add( new Images(null, "instrumentoOrtodoncia2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\instrumentoOrtodoncia2.jpg"), instrumentoOrtodoncia2));
+        images.add( new Images(null, "jeringa1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\jeringa1.jpg"), jeringa1));
+        images.add( new Images(null, "jeringa2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\jeringa2.jpg"), jeringa2));
+        images.add( new Images(null, "mango1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\mango1.jpg"), mango1));
+        images.add( new Images(null, "mango2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\mango2.jpg"), mango2));
+        images.add( new Images(null, "MBTBraket1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\MBTBraket1.jpg"), mBTBraket1));
+        images.add( new Images(null, "MBTBraket2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\MBTBraket2.jpg"), mBTBraket2));
+        images.add( new Images(null, "ortopedia1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\ortopedia1.jpg"), ortopedia1));
+        images.add( new Images(null, "ortopedia2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\ortopedia2.jpg"), ortopedia2));
+        images.add( new Images(null, "pinza1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\pinza1.jpg"), pinzaDental1));
+        images.add( new Images(null, "pinza2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\pinza2.jpg"), pinzaDental2));
+        images.add( new Images(null, "pinza1Ortodoncia1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\pinzaOrtodoncia1.jpg"), pinzaOrtodoncia1));
+        images.add( new Images(null, "pinza2Ortodoncia1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\pinzaOrtodoncia2.jpg"), pinzaOrtodoncia2));
+        images.add( new Images(null, "portaaguja1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\portaaguja1.jpg"), portaAguja1));
+        images.add( new Images(null, "portaaguja2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\portaaguja2.jpg"), portaAguja2));
+        images.add( new Images(null, "protectorCepilloImage", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\protectorCepillo.jpg"), protectorCepillo));
+        images.add( new Images(null, "provisional1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\provisional1.jpg"), provisional1));
+        images.add( new Images(null, "provisional2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\provisional2.jpg"), provisional2));
+        images.add( new Images(null, "rebase1Image", "png", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\rebase1.png"), rebase1));
+        images.add( new Images(null, "rebase2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\rebase2.jpg"), rebase2));
+        images.add( new Images(null, "reconstructor1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\reconstructor1.jpg"), reconstructor1));
+        images.add( new Images(null, "reconstructor2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\reconstructor2.jpg"), reconstructor2));
+        images.add( new Images(null, "resina1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\resina1.jpg"), resina1));
+        images.add( new Images(null, "resina2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\resina2.jpg"), resina2));
+        images.add( new Images(null, "rothBraket1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\rothBraket1.jpg"), rothBraket1));
+        images.add( new Images(null, "rothBraket2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\rothBraket2.jpg"), rothBraket2));
+        images.add( new Images(null, "tigera1Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\tigera1.jpg"), tigera1));
+        images.add( new Images(null, "tubo1Image", "png", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\tubo1.png"), tubo1));
+        images.add( new Images(null, "tubo2Image", "jpeg", imageUtils.loadImageData("C:\\Users\\dj-os\\OneDrive\\Documentos\\Spring\\web-page\\dont-used\\example-images\\tubo2.jpg"), tubo2));
 
         imagesRep.saveAll(images);
     }   

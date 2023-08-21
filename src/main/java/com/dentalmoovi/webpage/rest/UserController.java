@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.dentalmoovi.webpage.dtos.UserDTO;
 import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
+import com.dentalmoovi.webpage.models.dtos.UserDTO;
 import com.dentalmoovi.webpage.services.UserSer;
 
 @RestController

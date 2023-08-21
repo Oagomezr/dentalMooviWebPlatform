@@ -1,12 +1,15 @@
-package com.dentalmoovi.webpage.models;
+package com.dentalmoovi.webpage.models.entities;
 
+import java.util.Set;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,26 +22,34 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Images {
+public class Categories {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idImage;
+    @Column(name = "id_category")
+    private Long idCategory;
 
+    @Column(nullable = false, length = 70)
     private String name;
-    private String contentType;
 
-    @Lob
-    private byte[] data;
+    @Column(length = 70)
+    private String checkProduct;
+
+    @Column(length = 50)
+    private int numberUpdates;
 
     @ManyToOne
-    @JoinColumn(name = "id_product")
-    private Products product;
+    @JoinColumn(name = "parent_category")
+    private Categories parentCategory;
+
+    @OneToMany(mappedBy = "category", targetEntity = Products.class)
+    private Set<Products> products;
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((idImage == null) ? 0 : idImage.hashCode());
+        result = prime * result + ((idCategory == null) ? 0 : idCategory.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
@@ -51,11 +62,11 @@ public class Images {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Images other = (Images) obj;
-        if (idImage == null) {
-            if (other.idImage != null)
+        Categories other = (Categories) obj;
+        if (idCategory == null) {
+            if (other.idCategory != null)
                 return false;
-        } else if (!idImage.equals(other.idImage))
+        } else if (!idCategory.equals(other.idCategory))
             return false;
         if (name == null) {
             if (other.name != null)

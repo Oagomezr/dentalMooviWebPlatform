@@ -2,7 +2,7 @@ package com.dentalmoovi.webpage.services;
 
 import java.util.List;
 
-import com.dentalmoovi.webpage.dtos.UserDTO;
+import com.dentalmoovi.webpage.models.dtos.UserDTO;
 
 public interface InterfaceUserSer {
     public List<UserDTO> getAllUsers();

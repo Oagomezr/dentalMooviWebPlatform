@@ -1,4 +1,4 @@
-package com.dentalmoovi.webpage.models;
+package com.dentalmoovi.webpage.models.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

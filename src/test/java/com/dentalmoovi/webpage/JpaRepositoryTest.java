@@ -12,8 +12,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.dentalmoovi.webpage.models.Roles;
-import com.dentalmoovi.webpage.models.Users;
+import com.dentalmoovi.webpage.models.entities.Roles;
+import com.dentalmoovi.webpage.models.entities.Users;
 import com.dentalmoovi.webpage.repositories.IRolesRep;
 import com.dentalmoovi.webpage.repositories.IUsersRep;
 

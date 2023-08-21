@@ -1,4 +1,4 @@
-package com.dentalmoovi.webpage.dtos;
+package com.dentalmoovi.webpage.models.dtos;
 
 import java.time.LocalDate;
 import java.util.HashSet;

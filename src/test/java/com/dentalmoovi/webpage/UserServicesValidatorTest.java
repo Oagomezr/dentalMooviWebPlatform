@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.dentalmoovi.webpage.dtos.UserDTO;
 import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
+import com.dentalmoovi.webpage.models.dtos.UserDTO;
 import com.dentalmoovi.webpage.services.UserSer;
 
 @SpringBootTest

@@ -1,7 +1,5 @@
 package com.dentalmoovi.webpage.rest;
 
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -10,9 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dentalmoovi.webpage.services.ProductsSer;
-import com.dentalmoovi.webpage.dtos.ProductsDTO;
 import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
+import com.dentalmoovi.webpage.models.reponses.ProductsResponse;
+import com.dentalmoovi.webpage.services.ProductsSer;
 
 @RestController
 @RequestMapping
@@ -32,18 +30,18 @@ public class ProductsController {
         }
     } */
 
-    @GetMapping("/public/products/{id}")
-    public ResponseEntity<Set<ProductsDTO>> getProduct(@PathVariable Long id){
+    @GetMapping("/public/products/{name}")
+    public ResponseEntity<ProductsResponse> getProduct(@PathVariable String name){
         try {
-            Set<ProductsDTO> products = productsSer.getProductsByCategory(id);
+            ProductsResponse products = productsSer.getProductsByCategory(name);
             return ResponseEntity.ok(products);
         } catch (DataNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @GetMapping("/public/products/checkupdate/{id}")
-    public ResponseEntity<String> checkUpdateProductsByCategory(@PathVariable Long id){
-        return ResponseEntity.ok(productsSer.checkUpdateByCategory(id));
+    @GetMapping("/public/products/checkupdate/{name}")
+    public ResponseEntity<String> checkUpdateProductsByCategory(@PathVariable String name){
+        return ResponseEntity.ok(productsSer.checkUpdateByCategory(name));
     }
 }

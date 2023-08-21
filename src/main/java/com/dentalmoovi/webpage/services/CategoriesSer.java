@@ -1,14 +1,15 @@
 package com.dentalmoovi.webpage.services;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.dentalmoovi.webpage.dtos.CategoriesDTO;
-import com.dentalmoovi.webpage.models.Categories;
+import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
+import com.dentalmoovi.webpage.models.dtos.CategoriesDTO;
+import com.dentalmoovi.webpage.models.entities.Categories;
+import com.dentalmoovi.webpage.models.reponses.CategoriesResponse;
 import com.dentalmoovi.webpage.repositories.ICategoriesRep;
 
 @Service
@@ -21,25 +22,33 @@ public class CategoriesSer {
         return String.valueOf(categoriesRep.findMaxId() + categoriesRep.countUpdates());
     }
 
-    public Set<CategoriesDTO> getAllCategories() {
-        List<Categories> parentCategories = categoriesRep.findByParentCategoryIsNull();
-        Set<CategoriesDTO> parentCategoriesDTO = new HashSet<>();
-        for (Categories parentCategory : parentCategories) {
-            CategoriesDTO parentCategoryDTO = new CategoriesDTO(parentCategory.getIdCategory() ,parentCategory.getName(), 0, getSubCategories(parentCategory, 1));
-            parentCategoriesDTO.add(parentCategoryDTO);
-        }
-        return parentCategoriesDTO;
+    public String getNameCategoryById(Long id){
+        Categories category = categoriesRep.findById(id).orElseThrow(() -> new DataNotFoundException("category not found"));
+        return category.getName();
     }
 
-    private Set<CategoriesDTO> getSubCategories(Categories category, int lvl) {
-        int readjust = (lvl - 1) % 4 + 1;
-        List<Categories> children = categoriesRep.findByParentCategory(category);
-        Set<CategoriesDTO> childrenDTO = new HashSet<>();
+    public CategoriesResponse getAllCategories() {
+        List<Categories> parentCategories = categoriesRep.findByParentCategoryIsNullOrderByName();
+        List<CategoriesDTO> parentCategoriesDTO = new ArrayList<>();
+        for (Categories parentCategory : parentCategories) {
+            CategoriesDTO parentCategoryDTO = new CategoriesDTO(List.of(parentCategory.getName()), getSubCategories(parentCategory, List.of(parentCategory.getName())));
+            parentCategoriesDTO.add(parentCategoryDTO);
+        }
+        return new CategoriesResponse(parentCategoriesDTO);
+    }
+
+    private List<CategoriesDTO> getSubCategories(Categories category, List<String> parents) {
+        List<Categories> children = categoriesRep.findByParentCategoryOrderByName(category);
+        
+        List<CategoriesDTO> childrenDTO = new ArrayList<>();
         if(children.isEmpty()){
             return childrenDTO;
         }else{
             for (Categories child : children) {
-                CategoriesDTO childDTO = new CategoriesDTO(child.getIdCategory() ,child.getName(), readjust, getSubCategories(child, lvl+1));
+                List<String> idAndParents = new ArrayList<>();
+                idAndParents.add(child.getName());
+                idAndParents.addAll(parents);
+                CategoriesDTO childDTO = new CategoriesDTO(idAndParents, getSubCategories(child, idAndParents));
                 childrenDTO.add(childDTO);
             }
             return childrenDTO;

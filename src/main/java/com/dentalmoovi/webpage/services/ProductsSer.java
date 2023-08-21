@@ -1,5 +1,6 @@
 package com.dentalmoovi.webpage.services;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
@@ -8,12 +9,13 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.dentalmoovi.webpage.dtos.ImagesDTO;
-import com.dentalmoovi.webpage.dtos.ProductsDTO;
 import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
-import com.dentalmoovi.webpage.models.Categories;
-import com.dentalmoovi.webpage.models.Images;
-import com.dentalmoovi.webpage.models.Products;
+import com.dentalmoovi.webpage.models.dtos.ImagesDTO;
+import com.dentalmoovi.webpage.models.dtos.ProductsDTO;
+import com.dentalmoovi.webpage.models.entities.Categories;
+import com.dentalmoovi.webpage.models.entities.Images;
+import com.dentalmoovi.webpage.models.entities.Products;
+import com.dentalmoovi.webpage.models.reponses.ProductsResponse;
 import com.dentalmoovi.webpage.repositories.ICategoriesRep;
 import com.dentalmoovi.webpage.repositories.IProductsRep;
 
@@ -29,14 +31,14 @@ public class ProductsSer {
     private ICategoriesRep categoriesRep;
 
     @Transactional
-    public Set<ProductsDTO> getProductsByCategory(Long idParentCategory){
+    public ProductsResponse getProductsByCategory(String parentCategoryName){
         Long numberUpdates = 0L;
         Long maxIdProduct = 0L;
-        Categories parentCategory = categoriesRep.findById(idParentCategory).orElseThrow(() -> new DataNotFoundException("category not found"));
-        Set<ProductsDTO> allProductsDTO = new HashSet<>();
-        for(Long idCategory : getIdsCategories(parentCategory, idParentCategory)){
-            List<Products> productsByCategory = productsRep.findByCategoryId(idCategory);
-            Set<ProductsDTO> productsDTO = new HashSet<>();
+        Categories parentCategory = categoriesRep.findByName(parentCategoryName).orElseThrow(() -> new DataNotFoundException("category not found"));
+        List<ProductsDTO> allProductsDTO = new ArrayList<>();
+        for(String categoryName : getNamesCategories(parentCategory, parentCategoryName)){
+            List<Products> productsByCategory = productsRep.findByCategoryName(categoryName);
+            List<ProductsDTO> productsDTO = new ArrayList<>();
             for (Products product : productsByCategory) {
                 Set<Images> productImages = product.getProductsImages();
                 Set<ImagesDTO> productImagesDTO = new HashSet<>();
@@ -53,21 +55,21 @@ public class ProductsSer {
         }
         parentCategory.setCheckProduct(String.valueOf(numberUpdates+maxIdProduct));
         categoriesRep.save(parentCategory);
-        return allProductsDTO;
+        return new ProductsResponse(allProductsDTO);
     }
 
-    private Set<Long> getIdsCategories(Categories parentCategory, Long idParent) {
-        List<Categories> children = categoriesRep.findByParentCategory(parentCategory);
-        Set<Long> ids = new HashSet<>();
+    private Set<String> getNamesCategories(Categories parentCategory, String idParent) {
+        List<Categories> children = categoriesRep.findByParentCategoryOrderByName(parentCategory);
+        Set<String> ids = new HashSet<>();
         ids.add(idParent);
         for (Categories child : children) {
-            ids.add(child.getIdCategory());
-            ids.addAll(getIdsCategories(child, child.getIdCategory()));
+            ids.add(child.getName());
+            ids.addAll(getNamesCategories(child, child.getName()));
         }
         return ids;
     }
 
-    public String checkUpdateByCategory(long id){
-        return categoriesRep.findCheckProductosById(id);
+    public String checkUpdateByCategory(String name){
+        return categoriesRep.findCheckProductosByName(name);
     }
 }

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
-import com.dentalmoovi.webpage.models.JwtRequest;
-import com.dentalmoovi.webpage.models.JwtResponse;
+import com.dentalmoovi.webpage.models.entities.JwtRequest;
+import com.dentalmoovi.webpage.models.entities.JwtResponse;
 import com.dentalmoovi.webpage.security.JwtTokenUtil;
 import com.dentalmoovi.webpage.services.JwtUserDetailsSer;
 

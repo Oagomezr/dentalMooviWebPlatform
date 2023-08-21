@@ -1,4 +1,4 @@
-package com.dentalmoovi.webpage.dtos;
+package com.dentalmoovi.webpage.models.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

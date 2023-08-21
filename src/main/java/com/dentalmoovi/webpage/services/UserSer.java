@@ -10,11 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.dentalmoovi.webpage.dtos.RoleDTO;
-import com.dentalmoovi.webpage.dtos.UserDTO;
 import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
-import com.dentalmoovi.webpage.models.Roles;
-import com.dentalmoovi.webpage.models.Users;
+import com.dentalmoovi.webpage.models.dtos.RoleDTO;
+import com.dentalmoovi.webpage.models.dtos.UserDTO;
+import com.dentalmoovi.webpage.models.entities.Roles;
+import com.dentalmoovi.webpage.models.entities.Users;
 import com.dentalmoovi.webpage.repositories.IRolesRep;
 import com.dentalmoovi.webpage.repositories.IUsersRep;
 @Service
