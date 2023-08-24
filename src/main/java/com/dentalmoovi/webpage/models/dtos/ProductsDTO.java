@@ -1,6 +1,6 @@
 package com.dentalmoovi.webpage.models.dtos;
 
-import java.util.Set;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,5 +14,6 @@ public class ProductsDTO {
     private double unitPrice;
     private String description;
     private int stock;
-    private Set<ImagesDTO> images;
+    private List<ImagesDTO> images;
+    private List<String> location;
 }

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
 import com.dentalmoovi.webpage.models.entities.JwtRequest;
 import com.dentalmoovi.webpage.models.entities.JwtResponse;
 import com.dentalmoovi.webpage.security.JwtTokenUtil;
@@ -54,7 +53,7 @@ public class JwtAuthenticationController {
         try {
             jwtTokenUtil.expireToken(token);
             return ResponseEntity.noContent().build();
-        } catch (DataNotFoundException e) {
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }

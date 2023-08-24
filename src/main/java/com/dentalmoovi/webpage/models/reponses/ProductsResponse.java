@@ -12,5 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ProductsResponse {
+    private int amountProducts;
+    private int paginatedProducts;
     private List<ProductsDTO> data;
 }

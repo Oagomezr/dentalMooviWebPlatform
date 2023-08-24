@@ -21,16 +21,28 @@ public class CategoriesController {
 
     @GetMapping("/public/categories/checkupdate")
     public ResponseEntity<String> checkUpdateCategories() {
-        return ResponseEntity.ok(categoriesSer.checkUpdate());
+        try{
+            return ResponseEntity.ok(categoriesSer.checkUpdate());
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/public/categories")
     public ResponseEntity<CategoriesResponse> getAllCategories() {
-        return ResponseEntity.ok(categoriesSer.getAllCategories());
+        try{
+            return ResponseEntity.ok(categoriesSer.getAllCategories());
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/public/categories/{id}")
     public ResponseEntity<String> getNameCategoryById(@PathVariable Long id) {
-        return ResponseEntity.ok(categoriesSer.getNameCategoryById(id));
+        try{
+            return ResponseEntity.ok(categoriesSer.getNameCategoryById(id));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

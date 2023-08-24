@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
 import com.dentalmoovi.webpage.models.entities.Roles;
 import com.dentalmoovi.webpage.models.entities.Users;
 import com.dentalmoovi.webpage.repositories.IUsersRep;
@@ -17,9 +16,9 @@ public class JwtUserDetailsSer implements UserDetailsService{
     private IUsersRep usersRep;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws DataNotFoundException {
+    public UserDetails loadUserByUsername(String email){
 
-        Users user = usersRep.findByEmail(email).orElseThrow(() -> new DataNotFoundException("User Not Found"));
+        Users user = usersRep.findByEmail(email).orElseThrow(() -> new RuntimeException("User Not Found"));
         
         return User
                 .withUsername(email)

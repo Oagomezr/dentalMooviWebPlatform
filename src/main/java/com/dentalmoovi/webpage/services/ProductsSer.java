@@ -2,14 +2,13 @@ package com.dentalmoovi.webpage.services;
 
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
 import com.dentalmoovi.webpage.models.dtos.ImagesDTO;
 import com.dentalmoovi.webpage.models.dtos.ProductsDTO;
 import com.dentalmoovi.webpage.models.entities.Categories;
@@ -31,45 +30,104 @@ public class ProductsSer {
     private ICategoriesRep categoriesRep;
 
     @Transactional
-    public ProductsResponse getProductsByCategory(String parentCategoryName){
-        Long numberUpdates = 0L;
-        Long maxIdProduct = 0L;
-        Categories parentCategory = categoriesRep.findByName(parentCategoryName).orElseThrow(() -> new DataNotFoundException("category not found"));
-        List<ProductsDTO> allProductsDTO = new ArrayList<>();
-        for(String categoryName : getNamesCategories(parentCategory, parentCategoryName)){
-            List<Products> productsByCategory = productsRep.findByCategoryName(categoryName);
-            List<ProductsDTO> productsDTO = new ArrayList<>();
-            for (Products product : productsByCategory) {
-                Set<Images> productImages = product.getProductsImages();
-                Set<ImagesDTO> productImagesDTO = new HashSet<>();
-                for (Images productImage : productImages) {
-                    String base64Image = Base64.getEncoder().encodeToString(productImage.getData());
-                    ImagesDTO imageDTO = new ImagesDTO(productImage.getName(), productImage.getContentType(), base64Image);
-                    productImagesDTO.add(imageDTO);
-                }
-                productsDTO.add(new ProductsDTO(product.getNameProduct(), product.getUnitPrice(), product.getDescription(), product.getStock(), productImagesDTO));
-                numberUpdates += product.getNumberUpdates();
-                if(product.getIdProduct() > maxIdProduct) maxIdProduct = product.getIdProduct();
+    public ProductsResponse getProductsByCategory(String parentCategoryName, int currentPage, int productsPerPage){
+        class GetProductsByCategory{
+            ProductsResponse getProductsByCategory() {
+                Categories parentCategory = categoriesRep.findByName(parentCategoryName)
+                        .orElseThrow(() -> new RuntimeException("Category not found"));
+            
+                List<Products> allProducts = new ArrayList<>();
+
+                List<String> listAllSubCategories = getNamesCategories(parentCategory);
+                listAllSubCategories.add(parentCategoryName);
+            
+                for (String categoryName : listAllSubCategories)
+                    allProducts.addAll(productsRep.findByCategoryName(categoryName));
+                
+                Collections.sort(allProducts, (product1, product2) -> product1.getNameProduct().compareTo(product2.getNameProduct()));
+
+                int startIndex = (currentPage - 1) * productsPerPage;
+                int endIndex = Math.min(startIndex + productsPerPage, allProducts.size());
+                List<Products> currentPageProducts = allProducts.subList(startIndex, endIndex);
+                
+                List<ProductsDTO> productsDTO = convertToProductsDTOList(currentPageProducts);
+                
+                return new ProductsResponse(allProducts.size(),productsDTO.size(), productsDTO);
             }
-            allProductsDTO.addAll(productsDTO);
+
+            private List<String> getNamesCategories(Categories parentCategory) {
+                List<Categories> children = categoriesRep.findByParentCategoryOrderByName(parentCategory);
+                List<String> names = new ArrayList<>();
+                for (Categories child : children) {
+                    names.add(child.getName());
+                    names.addAll(getNamesCategories(child));
+                }
+                return names;
+            }
+            
         }
-        parentCategory.setCheckProduct(String.valueOf(numberUpdates+maxIdProduct));
-        categoriesRep.save(parentCategory);
-        return new ProductsResponse(allProductsDTO);
+        GetProductsByCategory innerClass = new GetProductsByCategory();
+        return innerClass.getProductsByCategory();
     }
 
-    private Set<String> getNamesCategories(Categories parentCategory, String idParent) {
-        List<Categories> children = categoriesRep.findByParentCategoryOrderByName(parentCategory);
-        Set<String> ids = new HashSet<>();
-        ids.add(idParent);
-        for (Categories child : children) {
-            ids.add(child.getName());
-            ids.addAll(getNamesCategories(child, child.getName()));
+    @Transactional
+    public ProductsDTO getProduct(String name){
+
+        class GetProduct{
+            ProductsDTO getProduct(){
+                Products product = productsRep.findByNameProduct(name)
+                    .orElseThrow(() -> new RuntimeException("Category not found"));
+                Categories category = product.getCategory();
+                List<String> location = getLocationProduct(category);
+                List<ImagesDTO> productImagesDTO = getProductImages(product.getProductsImages());
+
+                return new ProductsDTO(name, product.getUnitPrice(), product.getDescription(), product.getStock(), productImagesDTO, location);
+            }
+
+            private List<String> getLocationProduct(Categories category){
+                List<String> location = new ArrayList<>();
+                location.add(category.getName());
+                if(category.getParentCategory() != null) location.addAll(getLocationProduct(category.getParentCategory()));
+                return location;
+            }
         }
-        return ids;
+
+        GetProduct innerClass = new GetProduct();
+        return innerClass.getProduct();
     }
 
-    public String checkUpdateByCategory(String name){
-        return categoriesRep.findCheckProductosByName(name);
+    private List<ImagesDTO> getProductImages(Set<Images> productImages){
+        List<ImagesDTO> productImagesDTO = new ArrayList<>();
+        for (Images productImage : productImages) {
+            String base64Image = Base64.getEncoder().encodeToString(productImage.getData());
+            ImagesDTO imageDTO = new ImagesDTO(productImage.getName(), productImage.getContentType(), base64Image);
+            productImagesDTO.add(imageDTO);
+        }
+        return productImagesDTO;
+    }
+
+    @Transactional
+    public ProductsResponse getProductsByContaining(String name, boolean limit){
+        List<Products> productsFound;
+        if(limit){
+            productsFound = productsRep.findTop7ByNameProductContainingIgnoreCase(name);
+        }else{
+            productsFound = productsRep.findByNameProductContainingIgnoreCase(name);
+        }
+        
+        List<ProductsDTO> productsDTO = convertToProductsDTOList(productsFound);
+
+        return new ProductsResponse(0, productsDTO.size(), productsDTO);
+    }
+
+    private List<ProductsDTO> convertToProductsDTOList(List<Products> productsList) {
+        List<ProductsDTO> productsDTOList = new ArrayList<>();
+    
+        for (Products product : productsList) {
+            List<ImagesDTO> productImagesDTO = getProductImages(product.getProductsImages());
+            productsDTOList.add(new ProductsDTO(product.getNameProduct(), product.getUnitPrice(), product.getDescription(), product.getStock(), productImagesDTO, null));
+        }
+    
+        return productsDTOList;
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
+import com.dentalmoovi.webpage.models.dtos.ProductsDTO;
 import com.dentalmoovi.webpage.models.reponses.ProductsResponse;
 import com.dentalmoovi.webpage.services.ProductsSer;
 
@@ -20,28 +20,35 @@ public class ProductsController {
     @Autowired
     private ProductsSer productsSer;
 
-    /* @GetMapping("/public/products/{id}")
-    public ResponseEntity<Set<ProductsDTO>> getProduct(@PathVariable Long id){
+    @GetMapping("/public/products/search/{name}/{limit}")
+    public ResponseEntity<ProductsResponse> getProductsByContaining(@PathVariable String name, @PathVariable boolean limit){
         try {
-            Set<ProductsDTO> products = productsSer.getProductsByCategory(id);
+            ProductsResponse products = productsSer.getProductsByContaining(name, limit);
             return ResponseEntity.ok(products);
-        } catch (DataNotFoundException e) {
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
-    } */
+    }
 
     @GetMapping("/public/products/{name}")
-    public ResponseEntity<ProductsResponse> getProduct(@PathVariable String name){
+    public ResponseEntity<ProductsDTO> getProduct(@PathVariable String name){
         try {
-            ProductsResponse products = productsSer.getProductsByCategory(name);
+            ProductsDTO products = productsSer.getProduct(name);
             return ResponseEntity.ok(products);
-        } catch (DataNotFoundException e) {
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @GetMapping("/public/products/checkupdate/{name}")
-    public ResponseEntity<String> checkUpdateProductsByCategory(@PathVariable String name){
-        return ResponseEntity.ok(productsSer.checkUpdateByCategory(name));
+    @GetMapping("/public/products/category/{name}/{pageNumber}/{pageSize}")
+    public ResponseEntity<ProductsResponse> getProductsByCategory(
+        @PathVariable String name, @PathVariable int pageNumber, @PathVariable int pageSize){
+        try {
+            ProductsResponse products = productsSer.getProductsByCategory(name, pageNumber, pageSize);
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
+
 }

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
 import com.dentalmoovi.webpage.models.dtos.RoleDTO;
 import com.dentalmoovi.webpage.models.dtos.UserDTO;
 import com.dentalmoovi.webpage.models.entities.Roles;
@@ -40,7 +39,7 @@ public class UserSer implements InterfaceUserSer{
             UserDTO createUser(){ 
                 checkEmailExists(userDTO.getEmail());
                 Users newUser = insertUnrelatedData(userDTO); //add non foreign key data
-                Roles defaultRole = rolesRep.findByNameRole("USER").orElseThrow(() -> new DataNotFoundException(notFoundMessage));
+                Roles defaultRole = rolesRep.findByNameRole("USER").orElseThrow(() -> new RuntimeException(notFoundMessage));
                 newUser.getRoles().add(defaultRole); //add default role --> USER
                 String hashedPassword = new BCryptPasswordEncoder().encode(userDTO.getPassword()); //Encrypt the password
                 newUser.setPassword(hashedPassword); //set encrypt pssword
@@ -63,19 +62,19 @@ public class UserSer implements InterfaceUserSer{
 
     @Override
     public UserDTO getUserById(Long idUser) {
-        Users user = usersRep.findById(idUser).orElseThrow(() -> new DataNotFoundException(notFoundMessage));
+        Users user = usersRep.findById(idUser).orElseThrow(() -> new RuntimeException(notFoundMessage));
         return convertUserToDTO(user);
     }
 
     @Override
     public UserDTO getUserByEmail(String email) {
-        Users user = usersRep.findByEmail(email).orElseThrow(() -> new DataNotFoundException(notFoundMessage));
+        Users user = usersRep.findByEmail(email).orElseThrow(() -> new RuntimeException(notFoundMessage));
         return convertUserToDTO(user);
     }
 
     @Override
     public UserDTO updateUser(Long idUser, UserDTO userDTO) {
-        Users user = usersRep.findById(idUser).orElseThrow(() -> new DataNotFoundException(notFoundMessage));
+        Users user = usersRep.findById(idUser).orElseThrow(() -> new RuntimeException(notFoundMessage));
         userDTO.setIdUser(idUser);
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
@@ -89,7 +88,7 @@ public class UserSer implements InterfaceUserSer{
 
     @Override
     public void deleteUser(Long id) {
-        Users user = usersRep.findById(id).orElseThrow(() -> new DataNotFoundException(notFoundMessage));
+        Users user = usersRep.findById(id).orElseThrow(() -> new RuntimeException(notFoundMessage));
         usersRep.delete(user);
     }
 

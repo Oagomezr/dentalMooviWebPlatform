@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
 import com.dentalmoovi.webpage.models.dtos.UserDTO;
 import com.dentalmoovi.webpage.services.UserSer;
 
@@ -40,7 +39,7 @@ public class UserController {
         try {
             UserDTO userCreated = userSer.createUser(userDTO);
             return ResponseEntity.created(URI.create("/users/"+userCreated.getIdUser())).body(userCreated);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
@@ -50,7 +49,7 @@ public class UserController {
         try {
             UserDTO userGetted = userSer.getUserById(id);
             return ResponseEntity.ok(userGetted);
-        } catch (DataNotFoundException e) {
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -60,7 +59,7 @@ public class UserController {
         try {
             UserDTO userGetted = userSer.getUserByEmail(email);
             return ResponseEntity.ok(userGetted);
-        } catch (DataNotFoundException e) {
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -70,7 +69,7 @@ public class UserController {
         try {
             UserDTO userUpdated = userSer.updateUser(id, usersDTO);
             return ResponseEntity.ok(userUpdated);
-        } catch (DataNotFoundException e) {
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
         
@@ -81,7 +80,7 @@ public class UserController {
         try {
             userSer.deleteUser(id);
             return ResponseEntity.noContent().build();
-        } catch (DataNotFoundException e) {
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }

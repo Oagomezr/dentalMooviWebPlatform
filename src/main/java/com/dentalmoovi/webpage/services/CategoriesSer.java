@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
 import com.dentalmoovi.webpage.models.dtos.CategoriesDTO;
 import com.dentalmoovi.webpage.models.entities.Categories;
 import com.dentalmoovi.webpage.models.reponses.CategoriesResponse;
@@ -23,7 +22,7 @@ public class CategoriesSer {
     }
 
     public String getNameCategoryById(Long id){
-        Categories category = categoriesRep.findById(id).orElseThrow(() -> new DataNotFoundException("category not found"));
+        Categories category = categoriesRep.findById(id).orElseThrow(() -> new RuntimeException("category not found"));
         return category.getName();
     }
 

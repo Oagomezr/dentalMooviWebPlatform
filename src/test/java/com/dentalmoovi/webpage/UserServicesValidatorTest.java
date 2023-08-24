@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.dentalmoovi.webpage.exceptions.DataNotFoundException;
 import com.dentalmoovi.webpage.models.dtos.UserDTO;
 import com.dentalmoovi.webpage.services.UserSer;
 
@@ -51,7 +50,7 @@ class UserServicesValidatorTest {
     @Test
     void deleteUserValidator(){
         assertDoesNotThrow(() -> userSer.deleteUser(1L));
-        assertThrows(DataNotFoundException.class, () -> userSer.getUserById(1L));
+        assertThrows(RuntimeException.class, () -> userSer.getUserById(1L));
     }
 
 }
