@@ -19,4 +19,12 @@ public class CacheConfig {
                 .maximumSize(1000) // Establece el tamaño máximo de la caché
                 .build();
     }
+
+    @Bean
+    public Cache<Object, Object> registrationCodeConfig() {
+        return Caffeine.newBuilder()
+                .expireAfterWrite(20, TimeUnit.MINUTES) // Establece el tiempo de expiración a 10 minutos (puedes ajustarlo según tus necesidades)
+                .maximumSize(1000) // Establece el tamaño máximo de la caché
+                .build();
+    }
 }

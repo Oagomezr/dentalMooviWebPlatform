@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.dentalmoovi.webpage.models.dtos.CategoriesDTO;
@@ -21,11 +22,7 @@ public class CategoriesSer {
         return String.valueOf(categoriesRep.findMaxId() + categoriesRep.countUpdates());
     }
 
-    public String getNameCategoryById(Long id){
-        Categories category = categoriesRep.findById(id).orElseThrow(() -> new RuntimeException("category not found"));
-        return category.getName();
-    }
-
+    @Cacheable(cacheNames = "getAllCategories")
     public CategoriesResponse getAllCategories() {
         List<Categories> parentCategories = categoriesRep.findByParentCategoryIsNullOrderByName();
         List<CategoriesDTO> parentCategoriesDTO = new ArrayList<>();

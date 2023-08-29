@@ -1,6 +1,6 @@
 package com.dentalmoovi.webpage.models.entities;
 
-import java.util.Set;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -45,13 +45,20 @@ public class Products {
     @Column(length = 50)
     private int numberUpdates;
 
+    @Column(nullable = false)
+    private boolean openToPublic;
+
     @ManyToOne
     @JoinColumn(name = "id_category")
     @JsonIgnore
     private Categories category;
 
     @OneToMany(mappedBy = "product")
-    private Set<Images> productsImages;
+    private List<Images> productsImages;
+
+    @ManyToOne
+    @JoinColumn(name = "ID_principalImage")
+    private Images principalImage;
 
     @Override
     public int hashCode() {
@@ -83,6 +90,4 @@ public class Products {
             return false;
         return true;
     }
-
-    
 }

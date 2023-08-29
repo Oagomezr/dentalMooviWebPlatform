@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.dentalmoovi.webpage.models.dtos.ImagesDTO;
@@ -30,6 +30,7 @@ public class ProductsSer {
     private ICategoriesRep categoriesRep;
 
     @Transactional
+    @Cacheable(cacheNames = "productsByCategory")
     public ProductsResponse getProductsByCategory(String parentCategoryName, int currentPage, int productsPerPage){
         class GetProductsByCategory{
             ProductsResponse getProductsByCategory() {
@@ -71,6 +72,7 @@ public class ProductsSer {
     }
 
     @Transactional
+    @Cacheable(cacheNames = "getProduct")
     public ProductsDTO getProduct(String name){
 
         class GetProduct{
@@ -79,7 +81,7 @@ public class ProductsSer {
                     .orElseThrow(() -> new RuntimeException("Category not found"));
                 Categories category = product.getCategory();
                 List<String> location = getLocationProduct(category);
-                List<ImagesDTO> productImagesDTO = getProductImages(product.getProductsImages());
+                List<ImagesDTO> productImagesDTO = getProductImages(product, true);
 
                 return new ProductsDTO(name, product.getUnitPrice(), product.getDescription(), product.getStock(), productImagesDTO, location);
             }
@@ -96,36 +98,61 @@ public class ProductsSer {
         return innerClass.getProduct();
     }
 
-    private List<ImagesDTO> getProductImages(Set<Images> productImages){
+    private List<ImagesDTO> getProductImages(Products product, boolean allImages){
         List<ImagesDTO> productImagesDTO = new ArrayList<>();
-        for (Images productImage : productImages) {
-            String base64Image = Base64.getEncoder().encodeToString(productImage.getData());
-            ImagesDTO imageDTO = new ImagesDTO(productImage.getName(), productImage.getContentType(), base64Image);
+        if(allImages){
+            for (Images productImage : product.getProductsImages()) {
+                
+                String base64Image = Base64.getEncoder().encodeToString(productImage.getData());
+                ImagesDTO imageDTO = new ImagesDTO(productImage.getName(), productImage.getContentType(), base64Image);
+
+                if (product.getPrincipalImage() == productImage)
+                    productImagesDTO.add(0, imageDTO);
+                else
+                    productImagesDTO.add(imageDTO);
+            }
+        }else if(product.getPrincipalImage() != null){
+            String base64Image = Base64.getEncoder().encodeToString(product.getPrincipalImage().getData());
+            ImagesDTO imageDTO = new ImagesDTO(product.getPrincipalImage().getName(), product.getPrincipalImage().getContentType(), base64Image);
             productImagesDTO.add(imageDTO);
         }
+        
         return productImagesDTO;
     }
 
     @Transactional
-    public ProductsResponse getProductsByContaining(String name, boolean limit){
+    @Cacheable(cacheNames = "getProducsByContaining")
+    public ProductsResponse getProductsByContaining(String name, boolean limit, int currentPage, int productsPerPage){
         List<Products> productsFound;
         if(limit){
+
             productsFound = productsRep.findTop7ByNameProductContainingIgnoreCase(name);
+            List<ProductsDTO> productsDTO = convertToProductsDTOList(productsFound);
+            return new ProductsResponse(0, productsDTO.size(), productsDTO);
+
         }else{
-            productsFound = productsRep.findByNameProductContainingIgnoreCase(name);
+
+            List<Products> allProductsFound = productsRep.findByNameProductContainingIgnoreCase(name);
+            int startIndex = (currentPage - 1) * productsPerPage;
+            int endIndex = Math.min(startIndex + productsPerPage, allProductsFound.size());
+            productsFound = allProductsFound.subList(startIndex, endIndex);
+
+            List<ProductsDTO> productsDTO = convertToProductsDTOList(productsFound);
+
+            return new ProductsResponse(allProductsFound.size(), productsDTO.size(), productsDTO);
         }
         
-        List<ProductsDTO> productsDTO = convertToProductsDTOList(productsFound);
-
-        return new ProductsResponse(0, productsDTO.size(), productsDTO);
+        
     }
 
     private List<ProductsDTO> convertToProductsDTOList(List<Products> productsList) {
         List<ProductsDTO> productsDTOList = new ArrayList<>();
     
         for (Products product : productsList) {
-            List<ImagesDTO> productImagesDTO = getProductImages(product.getProductsImages());
-            productsDTOList.add(new ProductsDTO(product.getNameProduct(), product.getUnitPrice(), product.getDescription(), product.getStock(), productImagesDTO, null));
+            if(product.isOpenToPublic()){
+                List<ImagesDTO> productImagesDTO = getProductImages(product, false);
+                productsDTOList.add(new ProductsDTO(product.getNameProduct(), product.getUnitPrice(), product.getDescription(), product.getStock(), productImagesDTO, null));
+            }
         }
     
         return productsDTOList;

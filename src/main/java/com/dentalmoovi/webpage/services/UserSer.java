@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -93,6 +94,7 @@ public class UserSer implements InterfaceUserSer{
     }
 
     @Override
+    @Cacheable(cacheNames = "checkEmailExist")
     public boolean checkEmailExists(String value) {
         return usersRep.existsByEmail(value).orElseThrow(() -> new IllegalArgumentException("Email no exists"));
     }

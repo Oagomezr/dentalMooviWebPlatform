@@ -20,10 +20,10 @@ public class ProductsController {
     @Autowired
     private ProductsSer productsSer;
 
-    @GetMapping("/public/products/search/{name}/{limit}")
-    public ResponseEntity<ProductsResponse> getProductsByContaining(@PathVariable String name, @PathVariable boolean limit){
+    @GetMapping("/public/products/search/{name}/{limit}/{pageNumber}/{pageSize}")
+    public ResponseEntity<ProductsResponse> getProductsByContaining(@PathVariable String name, @PathVariable boolean limit, @PathVariable int pageNumber, @PathVariable int pageSize){
         try {
-            ProductsResponse products = productsSer.getProductsByContaining(name, limit);
+            ProductsResponse products = productsSer.getProductsByContaining(name, limit, pageNumber, pageSize);
             return ResponseEntity.ok(products);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
