@@ -5,24 +5,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.dentalmoovi.webpage.services.CacheSer;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import jakarta.annotation.Resource;
 
 @Component
 public class JwtTokenUtil{
 
-    @Resource
-    private CacheManager cacheManager;
+    @Autowired
+    private CacheSer cacheSer;
 
-    private static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60; // 5 hours in seconds
+    private static final long JWT_TOKEN_VALIDITY = 5L * 60L * 60L; // 5 hours in seconds
 
     @Value("${jwt.secret}")
     private String secret;
@@ -55,11 +55,10 @@ public class JwtTokenUtil{
 
     // Method to verify if JWT token has expired
     private Boolean isTokenExpired(String token) {
-        Cache blackList = cacheManager.getCache("blackList");
+        String blackList = cacheSer.getFromBlackListCache(token);
 
         if (blackList != null) {
-            String cachedToken = blackList.get("token", String.class);
-            return token.equals(cachedToken); // Retorna true si el token está en la caché
+            return true; // Return true if the token is in the cache
         }
 
         final Date expiration = getExpirationDateFromToken(token);
@@ -89,12 +88,8 @@ public class JwtTokenUtil{
     public void expireToken(String token) {
 
         //Caffeine<Object, Object> blackListConfig = blackListConfig();
-        Cache blackList = cacheManager.getCache("blackList");
+        cacheSer.addToOrUpdateRegistrationCache(token, "expired");
 
-        if(blackList != null){
-            blackList.put("token", token);
-        }
-        
     }
 
 }

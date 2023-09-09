@@ -1,0 +1,4 @@
+#it's important change the name of this file
+mailHost: smtp.example.com
+email: example@mail.com
+mailPassword: passwordExample

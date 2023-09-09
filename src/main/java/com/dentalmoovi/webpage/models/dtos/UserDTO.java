@@ -20,6 +20,7 @@ public class UserDTO {
     private LocalDate birthday;
     private String gender;
     private String password;
+    private String confirmCode;
     private Set<RoleDTO> roles = new HashSet<>();
 
     @Override

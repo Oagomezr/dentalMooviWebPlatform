@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 public class CacheConfig {
 
     @Bean
-    public Cache<Object, Object> blackListConfig() {
+    public Cache<String, String> blackListConfig() {
         return Caffeine.newBuilder()
                 .expireAfterWrite(5, TimeUnit.HOURS) // Establece el tiempo de expiración a 10 minutos (puedes ajustarlo según tus necesidades)
                 .maximumSize(1000) // Establece el tamaño máximo de la caché
@@ -21,7 +21,7 @@ public class CacheConfig {
     }
 
     @Bean
-    public Cache<Object, Object> registrationCodeConfig() {
+    public Cache<String, String> registrationCodeConfig() {
         return Caffeine.newBuilder()
                 .expireAfterWrite(20, TimeUnit.MINUTES) // Establece el tiempo de expiración a 10 minutos (puedes ajustarlo según tus necesidades)
                 .maximumSize(1000) // Establece el tamaño máximo de la caché

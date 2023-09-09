@@ -2,12 +2,12 @@ package com.dentalmoovi.webpage.services;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +17,7 @@ import com.dentalmoovi.webpage.models.entities.Roles;
 import com.dentalmoovi.webpage.models.entities.Users;
 import com.dentalmoovi.webpage.repositories.IRolesRep;
 import com.dentalmoovi.webpage.repositories.IUsersRep;
+
 @Service
 public class UserSer implements InterfaceUserSer{
 
@@ -24,21 +25,47 @@ public class UserSer implements InterfaceUserSer{
     private IUsersRep usersRep;
     @Autowired
     private IRolesRep rolesRep;
+    @Autowired
+    private EmailSer emailSer;
+    @Autowired
+    private CacheSer cacheSer;
+
+    Random random = new Random();
 
     @Override
     public List<UserDTO> getAllUsers() {
         List<Users> users = usersRep.findAll();
         return users.stream().map(this::convertUserToDTO).collect(Collectors.toList());
     }
+    
+    public void sendEmailNotification(String email) {
+        
+        int randomNumber = random.nextInt(1000000);
+        String formattedNumber = String.format("%06d", randomNumber);
 
-    @Override
-    public UserDTO createUser(UserDTO userDTO) {
+        String subject = "Codigo de confirmación";
+        String body =   "Dental Moovi recibió una solicitud de registro.\n\n"+
+                        "El codigo de confirmación es: "+ formattedNumber;
+        
+        cacheSer.addToOrUpdateRegistrationCache(email, formattedNumber);
+
+        try {
+            emailSer.sendEmail(email, subject, body);
+        } catch (Exception e) {
+            // Manage the exception in case it cannot send the email
+            e.printStackTrace();
+        }
+    }
+
+    public String createUser(UserDTO userDTO) throws RuntimeException {
 
         class CreateUser{
 
             /* ¡¡PLEASE PAY CLOSE ATTENTION ONLY THIS "createUser()" METHOD TO UNDERSTAND THIS SERVICE!! */ 
-            UserDTO createUser(){ 
-                checkEmailExists(userDTO.getEmail());
+            String createUser() throws RuntimeException{ 
+                if(checkEmailExists(userDTO.getEmail())) throw new RuntimeException("That user already exist");
+                String code = cacheSer.getFromRegistrationCache(userDTO.getEmail());
+                if(!userDTO.getConfirmCode().equals(code)) throw new RuntimeException("That code is incorrect");
                 Users newUser = insertUnrelatedData(userDTO); //add non foreign key data
                 Roles defaultRole = rolesRep.findByNameRole("USER").orElseThrow(() -> new RuntimeException(notFoundMessage));
                 newUser.getRoles().add(defaultRole); //add default role --> USER
@@ -46,8 +73,7 @@ public class UserSer implements InterfaceUserSer{
                 newUser.setPassword(hashedPassword); //set encrypt pssword
                 usersRep.save(newUser); // add complete user to the database
                 usersRep.flush();
-                userDTO.setPassword(hashedPassword);
-                return userDTO;
+                return "Usuario creado con exito";
             }
         
             private Users insertUnrelatedData(UserDTO userDTO){
@@ -94,7 +120,6 @@ public class UserSer implements InterfaceUserSer{
     }
 
     @Override
-    @Cacheable(cacheNames = "checkEmailExist")
     public boolean checkEmailExists(String value) {
         return usersRep.existsByEmail(value).orElseThrow(() -> new IllegalArgumentException("Email no exists"));
     }
@@ -112,7 +137,7 @@ public class UserSer implements InterfaceUserSer{
     }
 
     private UserDTO getUserFromDatabase(Users user){
-        return new UserDTO(user.getIdUser(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getCelPhone(), user.getBirthday(), user.getGender(), null, null);
+        return new UserDTO(user.getIdUser(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getCelPhone(), user.getBirthday(), user.getGender(), null, null, null);
     }
 
     private Set<RoleDTO> getAllUserRolesFromDatabase(Set<Roles> roles){
@@ -128,5 +153,7 @@ public class UserSer implements InterfaceUserSer{
     }
 
     private String notFoundMessage = "User not found";
+
+
 
 }

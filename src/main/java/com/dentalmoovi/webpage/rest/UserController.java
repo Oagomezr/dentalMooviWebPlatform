@@ -1,6 +1,5 @@
 package com.dentalmoovi.webpage.rest;
 
-import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +34,19 @@ public class UserController {
     }
 
     @PostMapping("/public/create")
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO){
+    public ResponseEntity<Void> createUser(@RequestBody UserDTO userDTO){
         try {
-            UserDTO userCreated = userSer.createUser(userDTO);
-            return ResponseEntity.created(URI.create("/users/"+userCreated.getIdUser())).body(userCreated);
+            userSer.createUser(userDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PostMapping("/public/sendEmail")
+    public void sendMessage(@RequestBody String email){
+        try {
+            userSer.sendEmailNotification(email);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

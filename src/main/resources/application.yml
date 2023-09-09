@@ -3,6 +3,9 @@ server:
 
 spring:
 
+    config:
+        import: optional:sensitiveInformation.yml #change the sensitiveInformationExample name with its credentials
+
     jpa:
         database: POSTGRESQL
         database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -19,6 +22,18 @@ spring:
         username: postgres
         password: Growth31053017
         driver-class-name: org.postgresql.Driver
+
+    mail:
+        host: ${mailHost}
+        port: 587
+        protocol: smtp
+        username: ${email}
+        password: ${mailPassword}
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls.enable: true
 
 logging:
     level:
