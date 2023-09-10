@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dentalmoovi.webpage.models.entities.JwtRequest;
-import com.dentalmoovi.webpage.models.entities.JwtResponse;
-import com.dentalmoovi.webpage.security.JwtTokenUtil;
-import com.dentalmoovi.webpage.services.JwtUserDetailsSer;
+import com.dentalmoovi.webpage.security.jwt.JwtRequest;
+import com.dentalmoovi.webpage.security.jwt.JwtResponse;
+import com.dentalmoovi.webpage.security.jwt.JwtTokenUtil;
+import com.dentalmoovi.webpage.security.jwt.JwtUserDetailsSer;
 
 @RestController
 @RequestMapping
 @CrossOrigin
-public class JwtAuthenticationController {
+public class AuthenticationController {
     
     @Autowired
     private AuthenticationManager authenticationManager;

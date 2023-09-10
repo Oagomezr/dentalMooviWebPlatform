@@ -1,4 +1,4 @@
-package com.dentalmoovi.webpage.security;
+package com.dentalmoovi.webpage.security.jwt;
 
 import java.io.IOException;
 
@@ -9,8 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import com.dentalmoovi.webpage.services.JwtUserDetailsSer;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -30,27 +28,18 @@ public class JwtRequestFilter extends OncePerRequestFilter{
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        
-        final String requestTokenHeader = request.getHeader("Authorization");
 
         String emailJwt = null;
-        String jwtToken = null;
+        String jwtToken = getToken(request);
 
-        // JWT Token is in the form of a "Bearer token". Remove Bearer word and get only the Token
-        if(requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")){
-            jwtToken = requestTokenHeader.substring(7);
-            try {
-				emailJwt = jwtTokenUtil.getEmailFromToken(jwtToken);
-			} catch (IllegalArgumentException e) {
-				System.out.println("Cannot get JWT Token");
-			} catch (ExpiredJwtException e) {
-				System.out.println("JWT Token has expired");
-			}
-        }
-        else {
-			logger.warn("JWT Token does not begin with Bearer String");
+		try {
+			emailJwt = jwtTokenUtil.getEmailFromToken(jwtToken);
+		} catch (IllegalArgumentException e) {
+			System.out.println("Cannot get JWT Token");
+		} catch (ExpiredJwtException e) {
+			System.out.println("JWT Token has expired");
 		}
-
+        
         // Once we get the token, we proceed to validate it
 		if (emailJwt != null && SecurityContextHolder.getContext().getAuthentication() == null &&
 			isUserHasAccess(request,emailJwt) ) {
@@ -72,6 +61,7 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 		filterChain.doFilter(request, response);
     }
 
+	//this method confirm if the user use their own token and not other
 	private boolean isUserHasAccess(HttpServletRequest request, String emailJwt){
 		String[] urlSegments = request.getRequestURI().split("/");
 		if("user".equals(urlSegments[1])){
@@ -82,4 +72,12 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 		return false;
 	}
     
+	// JWT Token is in the form of a "Bearer token". Remove Bearer word and get only the Token
+	private String getToken(HttpServletRequest request){
+        String header = request.getHeader("Authorization");
+        if (header != null && header.startsWith("Bearer")) 
+            return header.substring(7);
+        return null;
+    }
+
 }

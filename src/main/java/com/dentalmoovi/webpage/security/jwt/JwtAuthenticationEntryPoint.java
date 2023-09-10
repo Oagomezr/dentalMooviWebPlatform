@@ -1,4 +1,4 @@
-package com.dentalmoovi.webpage.security;
+package com.dentalmoovi.webpage.security.jwt;
 
 import java.io.IOException;
 

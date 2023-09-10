@@ -1,4 +1,4 @@
-package com.dentalmoovi.webpage.models.entities;
+package com.dentalmoovi.webpage.security.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -20,7 +20,7 @@ spring:
     datasource:
         url: jdbc:postgresql://localhost:5432/dentalmoovi
         username: postgres
-        password: Growth31053017
+        password: ${dataBasePassword}
         driver-class-name: org.postgresql.Driver
 
     mail:
@@ -40,4 +40,4 @@ logging:
         '[org.hibernate.SQL]': DEBUG
 
 jwt:
-    secret: MaxLuluChipy 
+    secret: ${jwtSecret}

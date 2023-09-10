@@ -2,3 +2,5 @@
 mailHost: smtp.example.com
 email: example@mail.com
 mailPassword: passwordExample
+jwtSecret: jwtSecretExample
+dataBasePassword: dataBasePasswordExample
