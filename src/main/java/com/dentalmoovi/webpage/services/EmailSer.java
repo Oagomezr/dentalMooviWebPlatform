@@ -1,6 +1,5 @@
 package com.dentalmoovi.webpage.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Service;
 public class EmailSer {
     private final JavaMailSender javaMailSender;
     
-    @Autowired
     public EmailSer(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }

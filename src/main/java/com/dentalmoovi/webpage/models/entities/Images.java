@@ -1,5 +1,6 @@
 package com.dentalmoovi.webpage.models.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,6 +29,7 @@ public class Images {
     private String contentType;
 
     @Lob
+    @Column(columnDefinition = "LONGBLOB")
     private byte[] data;
 
     @ManyToOne

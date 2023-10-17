@@ -6,22 +6,39 @@ spring:
     config:
         import: optional:sensitiveInformation.yml #change the sensitiveInformationExample name with its credentials
 
-    jpa:
-        database: POSTGRESQL
-        database-platform: org.hibernate.dialect.PostgreSQLDialect
-        show-sql: true
-        hibernate:
-            ddl-auto: create-drop
+    
 
     sql:
         init:
             platform: postgres
 
+    #JPA to PostgresSQL
+    #jpa:
+    #    database: POSTGRESQL
+    #    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    #    show-sql: true
+    #    hibernate:
+    #        ddl-auto: create-drop
+
+    #datasource:
+    #    url: jdbc:postgresql://localhost:5432/dentalmoovi
+    #    username: postgres
+    #    password: ${dataBasePasswordPostgres}
+    #    driver-class-name: org.postgresql.Driver
+
+    #JPA to MySQL
+    jpa:
+        database: MYSQL
+        #database-platform: org.hibernate.dialect.MySQL5Dialect
+        show-sql: true
+        hibernate:
+            ddl-auto: create-drop
+
     datasource:
-        url: jdbc:postgresql://localhost:5432/dentalmoovi
-        username: postgres
-        password: ${dataBasePassword}
-        driver-class-name: org.postgresql.Driver
+        url: jdbc:mysql://localhost:3306/dental_moovi
+        username: root
+        password: ${dataBasePasswordMySQL}
+        driver-class-name: com.mysql.cj.jdbc.Driver
 
     mail:
         host: ${mailHost}
