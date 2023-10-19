@@ -15,16 +15,16 @@ public class CacheConfig {
     @Bean
     public Cache<String, String> blackListConfig() {
         return Caffeine.newBuilder()
-                .expireAfterWrite(5, TimeUnit.HOURS) // Establece el tiempo de expiración a 10 minutos (puedes ajustarlo según tus necesidades)
-                .maximumSize(1000) // Establece el tamaño máximo de la caché
+                .expireAfterWrite(5, TimeUnit.HOURS) // Set expiration time
+                .maximumSize(1000) // Set the max cache's size
                 .build();
     }
 
     @Bean
     public Cache<String, String> registrationCodeConfig() {
         return Caffeine.newBuilder()
-                .expireAfterWrite(20, TimeUnit.MINUTES) // Establece el tiempo de expiración a 10 minutos (puedes ajustarlo según tus necesidades)
-                .maximumSize(1000) // Establece el tamaño máximo de la caché
+                .expireAfterWrite(20, TimeUnit.MINUTES) // Set expiration time
+                .maximumSize(1000) // Set the max cache's size
                 .build();
     }
 }

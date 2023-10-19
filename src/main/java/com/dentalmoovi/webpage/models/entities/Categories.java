@@ -11,17 +11,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Table
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Categories {
 
     @Id
@@ -29,6 +25,7 @@ public class Categories {
     @Column(name = "id_category")
     private Long idCategory;
 
+    @EqualsAndHashCode.Include
     @Column(nullable = false, length = 70)
     private String name;
 
@@ -44,39 +41,4 @@ public class Categories {
 
     @OneToMany(mappedBy = "category", targetEntity = Products.class)
     private Set<Products> products;
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((idCategory == null) ? 0 : idCategory.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Categories other = (Categories) obj;
-        if (idCategory == null) {
-            if (other.idCategory != null)
-                return false;
-        } else if (!idCategory.equals(other.idCategory))
-            return false;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
-            return false;
-        return true;
-    }
-
-    
-
-    
 }

@@ -29,8 +29,10 @@ class JpaRepositoryTest {
 
     @BeforeEach
     public void setup(){
-        Roles user = new Roles(null, "USER", null);
-        Roles admin = new Roles(null, "ADMIN", null);
+        Roles user = new Roles();
+        user.setNameRole("USER");
+        Roles admin = new Roles();
+        admin.setNameRole("ADMIN");
         rolesRep.save(user);
         rolesRep.save(admin);
     }
@@ -44,10 +46,22 @@ class JpaRepositoryTest {
         normalRoles.add(defaultRole);
 
         //create 2 users to do test
-        Users user1 = new Users(null, "uno", "usuario1", "usuario1@mail.com", "0123456789", null, "indefinido", "12345", null);
-        Users user2 = new Users(null, "dos", "usuario2", "usuario2@mail.com", "0123456789", null, "indefinido", "12345", null);
+        Users user1 = new Users();
+        user1.setFirstName("uno");
+        user1.setLastName("usuario1");
+        user1.setEmail("usuario1@mail.com");
+        user1.setCelPhone("0123456789");
+        user1.setGender("Male");
+        user1.setPassword("password");
+        Users user2 = new Users();
+        user2.setFirstName("dos");
+        user2.setLastName("usuario2");
+        user2.setEmail("usuario2@mail.com");
+        user2.setCelPhone("0123456789");
         user1.setRoles(normalRoles);
         user2.setRoles(normalRoles);
+        user2.setGender("Female");
+        user2.setPassword("password");
 
         //save inside database
         usersRep.save(user1);

@@ -4,13 +4,9 @@ import java.util.List;
 
 import com.dentalmoovi.webpage.models.dtos.ProductsDTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 public class ProductsResponse {
     private int amountProducts;
     private int paginatedProducts;

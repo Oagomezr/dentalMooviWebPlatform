@@ -4,13 +4,9 @@ import java.util.List;
 
 import com.dentalmoovi.webpage.models.dtos.CategoriesDTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 public class CategoriesResponse {
     private List<CategoriesDTO> data;
 }

@@ -13,23 +13,20 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Table
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Products {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProduct;
 
+    @EqualsAndHashCode.Include
     @Column(nullable = false, length = 70, unique = true)
     private String nameProduct;
 
@@ -59,35 +56,4 @@ public class Products {
     @ManyToOne
     @JoinColumn(name = "ID_principalImage")
     private Images principalImage;
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((idProduct == null) ? 0 : idProduct.hashCode());
-        result = prime * result + ((nameProduct == null) ? 0 : nameProduct.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Products other = (Products) obj;
-        if (idProduct == null) {
-            if (other.idProduct != null)
-                return false;
-        } else if (!idProduct.equals(other.idProduct))
-            return false;
-        if (nameProduct == null) {
-            if (other.nameProduct != null)
-                return false;
-        } else if (!nameProduct.equals(other.nameProduct))
-            return false;
-        return true;
-    }
 }

@@ -12,9 +12,9 @@ public class CorsConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Agrega el origen de tu aplicación Angular
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE")); // Agrega los métodos HTTP permitidos
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // Agrega los encabezados permitidos
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Location Angular application
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE")); // Add the HTTP methods allowed
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // Add the headers allowed
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

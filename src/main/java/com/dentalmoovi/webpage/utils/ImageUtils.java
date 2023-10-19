@@ -14,7 +14,7 @@ public class ImageUtils {
             Path path = Paths.get(imagePath);
             return Files.readAllBytes(path);
         } catch (IOException e) {
-            throw new RuntimeException("Error al cargar la imagen: " + imagePath, e);
+            throw new RuntimeException("Error to load the image: " + imagePath, e);
         }
     }
 }

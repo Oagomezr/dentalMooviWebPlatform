@@ -40,7 +40,10 @@ public class UserSer implements InterfaceUserSer{
     
     public void sendEmailNotification(String email) {
         
+        //Generate randomNumber
         int randomNumber = random.nextInt(1000000);
+
+        //generate a format to add zeros to the left in case randomNumber < 100000
         String formattedNumber = String.format("%06d", randomNumber);
 
         String subject = "Codigo de confirmación";
@@ -65,21 +68,28 @@ public class UserSer implements InterfaceUserSer{
             String createUser() throws RuntimeException{ 
                 if(checkEmailExists(userDTO.getEmail())) throw new RuntimeException("That user already exist");
                 String code = cacheSer.getFromRegistrationCache(userDTO.getEmail());
+                //filter to know if user confirm the email
                 if(!userDTO.getConfirmCode().equals(code)) throw new RuntimeException("That code is incorrect");
                 Users newUser = insertUnrelatedData(userDTO); //add non foreign key data
                 Roles defaultRole = rolesRep.findByNameRole("USER").orElseThrow(() -> new RuntimeException(notFoundMessage));
                 newUser.getRoles().add(defaultRole); //add default role --> USER
                 String hashedPassword = new BCryptPasswordEncoder().encode(userDTO.getPassword()); //Encrypt the password
-                newUser.setPassword(hashedPassword); //set encrypt pssword
+                newUser.setPassword(hashedPassword); //set encrypt password
                 usersRep.save(newUser); // add complete user to the database
-                usersRep.flush();
+                usersRep.flush(); //avoid errors during save data process
                 return "Usuario creado con exito";
             }
         
+            //This method is only use to insert unrelated data
             private Users insertUnrelatedData(UserDTO userDTO){
-                return new Users(  
-                    null, userDTO.getFirstName(), userDTO.getLastName(), 
-                    userDTO.getEmail(), userDTO.getCelPhone(), userDTO.getBirthday(), userDTO.getGender(), null, new HashSet<>());
+                Users user = new Users();
+                user.setFirstName(userDTO.getFirstName());
+                user.setLastName(userDTO.getLastName());
+                user.setEmail(userDTO.getEmail());
+                user.setCelPhone(userDTO.getCelPhone());
+                user.setBirthday(userDTO.getBirthday());
+                user.setGender(userDTO.getGender());
+                return user;
             }
         }
 
@@ -137,7 +147,15 @@ public class UserSer implements InterfaceUserSer{
     }
 
     private UserDTO getUserFromDatabase(Users user){
-        return new UserDTO(user.getIdUser(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getCelPhone(), user.getBirthday(), user.getGender(), null, null, null);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setIdUser(user.getIdUser());
+        userDTO.setFirstName(user.getFirstName());
+        userDTO.setLastName(user.getLastName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setCelPhone(user.getCelPhone());
+        userDTO.setBirthday(user.getBirthday());
+        userDTO.setGender(user.getGender());
+        return userDTO;
     }
 
     private Set<RoleDTO> getAllUserRolesFromDatabase(Set<Roles> roles){
@@ -149,11 +167,11 @@ public class UserSer implements InterfaceUserSer{
         return rolesDTO;
     }
     private RoleDTO getRoleFromDatabase(Roles role){
-        return new RoleDTO(role.getIdRole(), role.getNameRole());
+        RoleDTO roleDTO = new RoleDTO();
+        roleDTO.setIdRole(role.getIdRole());
+        roleDTO.setNameRole(role.getNameRole());
+        return roleDTO;
     }
 
     private String notFoundMessage = "User not found";
-
-
-
 }

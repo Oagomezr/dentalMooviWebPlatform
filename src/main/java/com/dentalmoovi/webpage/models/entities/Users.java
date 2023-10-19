@@ -14,17 +14,13 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Getter
-@Setter
 @Entity
 @Table
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +34,7 @@ public class Users {
     private String lastName;
 
     @Column(nullable = false, unique = true, length = 60)
+    @EqualsAndHashCode.Include
     private String email;
 
     @Column(nullable = false, length = 12)
@@ -58,30 +55,4 @@ public class Users {
                 inverseJoinColumns = { @JoinColumn(name = "id_role", referencedColumnName = "id_role") })
     private Set<Roles> roles = new HashSet<>();
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((idUser == null) ? 0 : idUser.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Users other = (Users) obj;
-        if (idUser == null) {
-            if (other.idUser != null)
-                return false;
-        } else if (!idUser.equals(other.idUser))
-            return false;
-        return true;
-    }
-
-    
 }
